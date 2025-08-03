@@ -1,0 +1,87 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-recess-order",
+    "stylelint-prettier/recommended"
+  ],
+  "plugins": ["stylelint-prettier"],
+  "overrides": [
+    {
+      "files": ["**/*.scss"],
+      "customSyntax": "postcss-scss"
+    },
+    {
+      "files": ["**/*.less"],
+      "customSyntax": "postcss-less"
+    }
+  ],
+  "rules": {
+    "prettier/prettier": true,
+    "selector-class-pattern": null,
+    "no-descending-specificity": null,
+    "function-url-quotes": "always",
+    "selector-attribute-quotes": "always",
+    "font-family-no-missing-generic-family-keyword": null,
+    "unit-no-unknown": [
+      true,
+      {
+        "ignoreUnits": ["rpx"]
+      }
+    ],
+    "selector-type-no-unknown": [
+      true,
+      {
+        "ignoreTypes": ["page"]
+      }
+    ],
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": [
+          "tailwind",
+          "apply",
+          "variants",
+          "responsive",
+          "screen",
+          "function",
+          "if",
+          "else",
+          "error",
+          "warn",
+          "each",
+          "include",
+          "mixin",
+          "extend"
+        ]
+      }
+    ],
+    "property-no-vendor-prefix": [
+      true,
+      {
+        "ignoreProperties": [
+          "appearance",
+          "backdrop-filter",
+          "clip-path",
+          "mask-image",
+          "tap-highlight-color",
+          "touch-callout"
+        ]
+      }
+    ],
+    "value-no-vendor-prefix": [
+      true,
+      {
+        "ignoreValues": ["box", "inline-box"]
+      }
+    ]
+  },
+  "ignoreFiles": [
+    "**/*.js",
+    "**/*.jsx",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.json",
+    "**/*.md",
+    "**/*.yaml"
+  ]
+}
