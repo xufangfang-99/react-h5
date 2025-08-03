@@ -99,7 +99,7 @@ git commit -m "feat(user): 添加用户头像上传功能
 - 自动压缩大于 1MB 的图片
 
 Closes #42"
-```css
+```bash
 
 ## Git Hooks 说明
 
@@ -109,7 +109,8 @@ Closes #42"
 
 1. **ESLint**: 检查并修复 JavaScript/TypeScript 代码
 2. **Prettier**: 格式化所有代码文件
-3. **Stylelint**: 检查并修复 CSS/SCSS 样式
+3. **Stylelint**: 检查并修复 CSS/SCSS/Less 样式
+4. **Markdownlint**: 检查并修复 Markdown 文件格式
 
 如果有错误，提交会被阻止。
 
@@ -120,6 +121,17 @@ Closes #42"
 ### pre-push
 
 在推送前运行 TypeScript 类型检查，确保没有类型错误。
+
+## 配置文件说明
+
+- **.husky/**: Git hooks 脚本目录
+- **.lintstagedrc.json**: lint-staged 配置，定义哪些文件执行哪些检查
+- **.commitlintrc.json**: commitlint 配置，定义提交信息规范
+- **.eslintrc.js**: ESLint 配置
+- **.prettierrc**: Prettier 代码格式化配置
+- **.stylelintrc.json**: Stylelint CSS 检查配置
+- **.markdownlintrc**: Markdown 文件格式检查配置
+- **.npmrc**: npm/pnpm 配置，设置了宽松的 peer dependencies 检查
 
 ## 跳过 Hooks（紧急情况使用）
 
@@ -147,11 +159,32 @@ pnpm prepare
 ### 2. lint-staged 运行失败
 
 ```bash
-# 手动运行检查
+# 手动运行各项检查
 pnpm lint:eslint
 pnpm lint:prettier
 pnpm lint:stylelint
+pnpm lint:markdown
+
+# 修复特定文件
+npx eslint path/to/file.ts --fix
+npx prettier path/to/file.ts --write
+```css
+
+### 3. TypeScript 版本冲突
+
+如果遇到 TypeScript 版本警告：
+
+```bash
+# 降级到兼容版本
+pnpm add -D typescript@5.8.3
 ````
+
+### 4. Markdown 格式错误
+
+如果 markdownlint 报错过于严格，可以：
+
+- 在文件顶部添加 `<!-- markdownlint-disable MD013 MD033 -->`
+- 或修改 `.markdownlintrc` 配置规则
 
 ### 3. 提交信息被拒绝
 

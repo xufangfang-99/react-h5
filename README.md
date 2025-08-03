@@ -199,6 +199,7 @@ import { utils } from '@/utils'
 ### 代码检查器
 
 开发环境下，按住组合键可以快速定位代码：
+
 - Mac: `Option + Shift`
 - Windows: `Alt + Shift`
 
@@ -234,7 +235,7 @@ export const useUserStore = create((set) => ({
   user: null,
   setUser: (user) => set({ user }),
 }))
-````
+```css
 
 ## 📱 移动端优化
 
@@ -251,6 +252,34 @@ export const useUserStore = create((set) => ({
 - **压缩支持**：支持 gzip/brotli 压缩
 - **CDN 支持**：生产环境可配置 CDN 加速
 - **打包分析**：可视化打包体积分析
+
+## 🔧 代码规范
+
+本项目使用严格的代码规范，通过 Git Hooks 自动执行：
+
+- **ESLint**: TypeScript/JavaScript 代码质量检查
+- **Prettier**: 代码格式化
+- **Stylelint**: CSS/SCSS 样式规范
+- **Markdownlint**: Markdown 文档格式
+- **Commitlint**: Git 提交信息规范
+
+详细的提交规范请查看 [COMMIT_CONVENTION.md](./COMMIT_CONVENTION.md)
+
+### 常用命令
+
+```bash
+# 运行所有 lint 检查
+pnpm lint
+
+# 单独运行各项检查
+pnpm lint:eslint
+pnpm lint:prettier
+pnpm lint:stylelint
+pnpm lint:markdown
+
+# 修复 Markdown 文件
+pnpm fix:markdown
+````
 
 ## 🤝 贡献指南
 
