@@ -4,13 +4,13 @@
 
 ## 提交格式
 
-```text
+````text
 <type>(<scope>): <subject>
 
 <body>
 
 <footer>
-```
+```text
 
 ### Type（必需）
 
@@ -151,7 +151,7 @@ pnpm prepare
 pnpm lint:eslint
 pnpm lint:prettier
 pnpm lint:stylelint
-```
+````
 
 ### 3. 提交信息被拒绝
 

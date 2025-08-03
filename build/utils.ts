@@ -92,10 +92,10 @@ const wrapperEnv = (envConf: Recordable): ViteEnv => {
 
 const fileListTotal: number[] = [];
 interface PackageSizeOptions {
-    folder?: string;
-    callback: (size: string | number) => void;
-    format?: boolean;
-  }
+  folder?: string;
+  callback: (size: string | number) => void;
+  format?: boolean;
+}
 /** 获取指定文件夹中所有文件的总大小 */
 const getPackageSize = (options: PackageSizeOptions) => {
   const { folder = "dist", callback, format = true } = options;

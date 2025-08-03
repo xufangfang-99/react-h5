@@ -44,6 +44,6 @@ export const cdn = importToCDN({
       var: "antd",
       path: "antd.min.js",
       css: "antd.min.css",
-    }
+    },
   ],
 });

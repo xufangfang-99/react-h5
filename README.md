@@ -37,7 +37,7 @@
 
 ### 安装依赖
 
-```bash
+````bash
 # 克隆项目
 git clone https://github.com/your-username/react-h5-admin.git
 
@@ -92,8 +92,7 @@ pnpm clean:cache
 
 ## 📂 项目结构
 
-```
-
+```text
 react-h5-admin/
 ├── build/              # 构建相关配置
 │   ├── cdn.ts         # CDN 配置
@@ -129,7 +128,6 @@ react-h5-admin/
 ├── tsconfig.json      # TypeScript 配置
 ├── uno.config.ts      # UnoCSS 配置
 └── vite.config.ts     # Vite 配置
-
 ```text
 
 ## 🔧 环境变量
@@ -236,7 +234,7 @@ export const useUserStore = create((set) => ({
   user: null,
   setUser: (user) => set({ user }),
 }))
-```
+````
 
 ## 📱 移动端优化
 
