@@ -6,7 +6,8 @@ import App from "./App.tsx";
 import "virtual:uno.css";
 
 // 引入全局样式
-import "./styles/index.css";
+import "@/styles/index.css";
+import "@/styles/mobile.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

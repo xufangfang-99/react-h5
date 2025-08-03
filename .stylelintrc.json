@@ -5,16 +5,6 @@
     "stylelint-prettier/recommended"
   ],
   "plugins": ["stylelint-prettier"],
-  "overrides": [
-    {
-      "files": ["**/*.scss"],
-      "customSyntax": "postcss-scss"
-    },
-    {
-      "files": ["**/*.less"],
-      "customSyntax": "postcss-less"
-    }
-  ],
   "rules": {
     "prettier/prettier": true,
     "selector-class-pattern": null,

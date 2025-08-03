@@ -1,6 +1,5 @@
 # React H5 Mobile Admin
 
-<!-- markdownlint-disable MD033 -->
 <p align="center">
   <img src="https://img.shields.io/badge/React-19.1.0-blue.svg" alt="React">
   <img src="https://img.shields.io/badge/Vite-7.0.6-646CFF.svg" alt="Vite">
@@ -10,7 +9,6 @@
   <img src="https://img.shields.io/badge/pnpm-%E2%89%A59.0.0-F69220.svg" alt="pnpm">
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
 </p>
-<!-- markdownlint-enable MD033 -->
 
 一个基于 React 19 + TypeScript + Vite + Ant Design Mobile 的现代化移动端管理系统模板，专为 H5 应用开发而设计。
 
@@ -21,7 +19,7 @@
 - 🎨 **UI 框架**：集成 Ant Design Mobile 5.x，提供丰富的移动端组件
 - 🎯 **TypeScript**：完整的类型定义，提供更好的开发体验
 - ⚡ **快速开发**：Vite + SWC 提供极速的开发体验
-- 🎪 **CSS 方案**：UnoCSS 原子化 CSS + PostCSS 移动端适配
+- 🎪 **CSS 方案**：UnoCSS 原子化 CSS + 移动端 vw 适配
 - 📦 **状态管理**：Zustand 轻量级状态管理方案
 - 🔧 **代码规范**：ESLint + Prettier + Husky + Commitlint
 - 🚦 **路由管理**：React Router v7 最新版本
@@ -39,7 +37,7 @@
 
 ### 安装依赖
 
-````bash
+```bash
 # 克隆项目
 git clone https://github.com/your-username/react-h5-admin.git
 
@@ -48,7 +46,7 @@ cd react-h5-admin
 
 # 安装依赖（请使用 pnpm）
 pnpm install
-```text
+```
 
 ### 开发启动
 
@@ -58,7 +56,7 @@ pnpm dev
 
 # 或者
 pnpm serve
-```text
+```
 
 ### 构建打包
 
@@ -71,7 +69,7 @@ pnpm build:staging
 
 # 构建并生成分析报告
 pnpm report
-```text
+```
 
 ### 其他命令
 
@@ -90,7 +88,7 @@ pnpm lint
 
 # 清理缓存
 pnpm clean:cache
-```text
+```
 
 ## 📂 项目结构
 
@@ -130,20 +128,20 @@ react-h5-admin/
 ├── tsconfig.json      # TypeScript 配置
 ├── uno.config.ts      # UnoCSS 配置
 └── vite.config.ts     # Vite 配置
-```text
+```
 
 ## 🔧 环境变量
 
 项目使用 `envs` 文件夹管理环境变量：
 
-| 变量名 | 说明 | 默认值 |
-| --- | --- | --- |
-| VITE_PORT | 开发服务器端口 | 3000 |
-| VITE_PUBLIC_PATH | 公共路径 | / |
-| VITE_ROUTER_HISTORY | 路由模式 (hash/h5) | hash |
-| VITE_CDN | 是否使用 CDN | false |
-| VITE_COMPRESSION | 压缩方式 | none |
-| VITE_HIDE_HOME | 是否隐藏首页 | false |
+| 变量名              | 说明               | 默认值 |
+| ------------------- | ------------------ | ------ |
+| VITE_PORT           | 开发服务器端口     | 3000   |
+| VITE_PUBLIC_PATH    | 公共路径           | /      |
+| VITE_ROUTER_HISTORY | 路由模式 (hash/h5) | hash   |
+| VITE_CDN            | 是否使用 CDN       | false  |
+| VITE_COMPRESSION    | 压缩方式           | none   |
+| VITE_HIDE_HOME      | 是否隐藏首页       | false  |
 
 ## 🎨 样式方案
 
@@ -155,35 +153,33 @@ react-h5-admin/
 <div className="flex items-center justify-between p-4">
   <button className="btn-primary">按钮</button>
 </div>
-```text
+```
 
-### PostCSS 移动端适配
+### 移动端适配方案
 
-使用 `postcss-px-to-viewport` 自动将 px 转换为 vw：
+使用 vw 单位进行移动端适配：
 
 ```css
-/* 编写时 */
+/* 设计稿基准：375px */
+/* 1px = 0.267vw (100vw / 375px) */
+
+/* 直接使用 vw 单位 */
 .header {
-  height: 88px;
-  font-size: 28px;
+  height: 11.733vw; /* 44px */
+  font-size: 4.267vw; /* 16px */
 }
 
-/* 转换后 */
-.header {
-  height: 11.733vw;
-  font-size: 3.733vw;
-}
-```text
+/* 或使用 UnoCSS */
+<div class="h-[11.733vw] text-[4.267vw]">
+```
 
 ### 1px 边框解决方案
 
 内置 1px 边框解决方案：
 
 ```jsx
-<div className="border-1px">
-  1像素边框
-</div>
-```text
+<div className="border-1px">1像素边框</div>
+```
 
 ## 🚀 开发指南
 
@@ -192,11 +188,11 @@ react-h5-admin/
 项目配置了以下路径别名，方便导入：
 
 ```typescript
-import Component from '@/components/Component'
-import { useCustomHook } from '@/hooks/useCustomHook'
-import { api } from '@/services/api'
-import { utils } from '@/utils'
-```text
+import Component from "@/components/Component";
+import { useCustomHook } from "@/hooks/useCustomHook";
+import { api } from "@/services/api";
+import { utils } from "@/utils";
+```
 
 ### 代码检查器
 
@@ -213,17 +209,17 @@ import { utils } from '@/utils'
 // mock/user.ts
 export default [
   {
-    url: '/api/user/list',
-    method: 'get',
+    url: "/api/user/list",
+    method: "get",
     response: () => {
       return {
         code: 200,
-        data: []
-      }
-    }
-  }
-]
-```text
+        data: [],
+      };
+    },
+  },
+];
+```
 
 ### 状态管理
 
@@ -231,13 +227,13 @@ export default [
 
 ```typescript
 // store/user.ts
-import { create } from 'zustand'
+import { create } from "zustand";
 
 export const useUserStore = create((set) => ({
   user: null,
   setUser: (user) => set({ user }),
-}))
-```css
+}));
+```
 
 ## 📱 移动端优化
 
@@ -281,7 +277,7 @@ pnpm lint:markdown
 
 # 修复 Markdown 文件
 pnpm fix:markdown
-````
+```
 
 ## 🤝 贡献指南
 

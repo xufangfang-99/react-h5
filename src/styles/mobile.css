@@ -1,0 +1,26 @@
+/* 移动端适配工具 */
+:root {
+  /* 设计稿宽度 */
+  --design-width: 375;
+
+  /* 1px = 0.267vw */
+  --vw-ratio: calc(100 / var(--design-width));
+}
+
+/* 使用示例 */
+
+/* 
+  .element {
+    width: calc(100 * var(--vw-ratio) * 1vw);
+    height: calc(44 * var(--vw-ratio) * 1vw);
+    font-size: calc(16 * var(--vw-ratio) * 1vw);
+  }
+  */
+
+/* 或者使用 UnoCSS 的自定义规则 */
+
+/* 
+  <div class="w-vw-100 h-vw-44 text-vw-16">
+    自动转换为 vw 单位
+  </div>
+  */
