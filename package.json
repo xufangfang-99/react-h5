@@ -19,7 +19,8 @@
     "lint:stylelint": "stylelint --cache --fix \"**/*.{html,css,scss,less}\" --cache-location node_modules/.cache/stylelint/",
     "lint": "pnpm lint:eslint && pnpm lint:prettier && pnpm lint:stylelint",
     "prepare": "husky",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "test": "echo \"No tests specified\" && exit 0"
   },
   "keywords": [
     "react",
