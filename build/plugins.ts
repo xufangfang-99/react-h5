@@ -1,6 +1,5 @@
 import { cdn } from "./cdn";
 import react from "@vitejs/plugin-react-swc";
-import { pathResolve } from "./utils";
 import { viteBuildInfo } from "./info";
 import svgLoader from "vite-svg-loader";
 import Icons from "unplugin-icons/vite";
@@ -15,7 +14,7 @@ import { vitePluginFakeServer } from "vite-plugin-fake-server";
 
 export function getPluginsList(
   VITE_CDN: boolean,
-  VITE_COMPRESSION: ViteCompression
+  VITE_COMPRESSION: ViteCompression,
 ): PluginOption[] {
   const lifecycle = process.env.npm_lifecycle_event;
   return [
@@ -24,7 +23,7 @@ export function getPluginsList(
     // React SWC 插件，提供最快的 React 开发体验
     react({
       // 开启 React 开发工具
-      devTarget: "esnext"
+      devTarget: "esnext",
     }),
     /**
      * 在页面上按住组合键时，鼠标在页面移动即会在 DOM 上出现遮罩层并显示相关信息，点击一下将自动打开 IDE 并将光标定位到元素对应的代码位置
@@ -34,7 +33,7 @@ export function getPluginsList(
      */
     codeInspectorPlugin({
       bundler: "vite",
-      hideConsole: true
+      hideConsole: true,
     }),
     viteBuildInfo(),
     /**
@@ -47,17 +46,17 @@ export function getPluginsList(
       logger: false,
       include: "mock",
       infixName: false,
-      enableProd: true
+      enableProd: true,
     }),
     // svg组件化支持
     svgLoader({
-      defaultImport: "component"
+      defaultImport: "component",
     }),
     // 自动按需加载图标
     Icons({
       compiler: "jsx",
       jsx: "react",
-      scale: 1
+      scale: 1,
     }),
     VITE_CDN ? cdn : null,
     configCompressPlugin(VITE_COMPRESSION),
@@ -66,6 +65,6 @@ export function getPluginsList(
     // 打包分析
     lifecycle === "report"
       ? visualizer({ open: true, brotliSize: true, filename: "report.html" })
-      : (null as any)
+      : (null as any),
   ];
 }

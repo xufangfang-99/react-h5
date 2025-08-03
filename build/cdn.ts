@@ -12,49 +12,38 @@ export const cdn = importToCDN({
     {
       name: "react",
       var: "React",
-      path: "umd/react.production.min.js"
+      path: "umd/react.production.min.js",
     },
     {
       name: "react-dom",
-      var: "ReactDOM", 
-      path: "umd/react-dom.production.min.js"
+      var: "ReactDOM",
+      path: "umd/react-dom.production.min.js",
     },
     {
       name: "react-router-dom",
       var: "ReactRouterDOM",
-      path: "umd/react-router-dom.min.js"
+      path: "umd/react-router-dom.min.js",
     },
     {
       name: "axios",
       var: "axios",
-      path: "axios.min.js"
+      path: "axios.min.js",
     },
     {
       name: "dayjs",
       var: "dayjs",
-      path: "dayjs.min.js"
+      path: "dayjs.min.js",
     },
     {
-      name: "lodash",
+      name: "lodash-es",
       var: "_",
-      path: "lodash.min.js"
+      path: "lodash.min.js",
     },
     {
       name: "antd",
       var: "antd",
       path: "antd.min.js",
-      css: "antd.min.css"
-    },
-    {
-      name: "echarts",
-      var: "echarts",
-      path: "echarts.min.js"
-    },
-    {
-      name: "swiper",
-      var: "Swiper",
-      path: "swiper-bundle.min.js",
-      css: "swiper-bundle.min.css"
+      css: "antd.min.css",
     }
-  ]
+  ],
 });

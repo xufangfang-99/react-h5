@@ -7,13 +7,13 @@ import boxen, { type Options as BoxenOptions } from "boxen";
 dayjs.extend(duration);
 
 const welcomeMessage = gradient(["cyan", "magenta"]).multiline(
-  `您好! 欢迎使用 React H5 项目\n我们为您精心准备了现代化的开发体验\n基于 Vite + React + TypeScript 构建`
+  `您好! 欢迎使用 React H5 项目\n我们为您精心准备了现代化的开发体验\n基于 Vite + React + TypeScript 构建`,
 );
 
 const boxenOptions: BoxenOptions = {
   padding: 0.5,
   borderColor: "cyan",
-  borderStyle: "round"
+  borderStyle: "round",
 };
 
 export function viteBuildInfo(): Plugin {
@@ -44,14 +44,14 @@ export function viteBuildInfo(): Plugin {
                 gradient(["cyan", "magenta"]).multiline(
                   `🎉 恭喜打包完成（总用时${dayjs
                     .duration(endTime.diff(startTime))
-                    .format("mm分ss秒")}，打包后的大小为${size}）`
+                    .format("mm分ss秒")}，打包后的大小为${size}）`,
                 ),
-                boxenOptions
-              )
+                boxenOptions,
+              ),
             );
-          }
+          },
         });
       }
-    }
+    },
   };
 }

@@ -5,54 +5,54 @@
  * 温馨提示：如果您使用的第三方库是全局引入，也就是引入到 src/main.tsx 文件里，就不需要再添加到 include 里了，因为 vite 会自动将它们缓存到 node_modules/.vite
  */
 const include = [
-    "qs",
-    "mitt",
-    "xlsx",
-    "dayjs",
-    "axios",
-    "clsx",
-    "react",
-    "ahooks",
-    "swiper",
-    "qrcode",
-    "zustand",
-    "classnames",
-    "react-dom",
-    "js-cookie",
-    "cropperjs",
-    "jsbarcode",
-    "codemirror",
-    "pinyin-pro",
-    "sortablejs",
-    "swiper/react",
-    "mint-filter",
-    "react/jsx-runtime",
-    "react/jsx-dev-runtime",
-    "highlight.js",
-    "@ant-design/icons",
-    "react-router-dom",
-    "wavesurfer.js",
-    "swiper/modules",
-    "china-area-data",
-    "@pureadmin/utils",
-    "responsive-storage",
-    "codemirror-editor-vue3",
-    "@amap/amap-jsapi-loader",
-    "react-virtualized",
-    "react-window",
-    "@tanstack/react-query",
-    "@emotion/react",
-    "@emotion/styled",
-    "framer-motion",
-    "react-hook-form",
-    "react-use",
-    "lodash-es"
-  ];
-  
-  /**
-   * 在预构建中强制排除的依赖项
-   * 温馨提示：平台推荐的使用方式是哪里需要哪里引入而且都是单个的引入，不需要预构建，直接让浏览器加载就好
-   */
-  const exclude = ["@iconify/json"];
-  
-  export { include, exclude };
+  "qs",
+  "mitt",
+  "xlsx",
+  "dayjs",
+  "axios",
+  "clsx",
+  "react",
+  "ahooks",
+  "swiper",
+  "qrcode",
+  "zustand",
+  "classnames",
+  "react-dom",
+  "js-cookie",
+  "cropperjs",
+  "jsbarcode",
+  "codemirror",
+  "pinyin-pro",
+  "sortablejs",
+  "swiper/react",
+  "mint-filter",
+  "react/jsx-runtime",
+  "react/jsx-dev-runtime",
+  "highlight.js",
+  "@ant-design/icons",
+  "react-router-dom",
+  "wavesurfer.js",
+  "swiper/modules",
+  "china-area-data",
+  "@pureadmin/utils",
+  "responsive-storage",
+  "codemirror-editor-vue3",
+  "@amap/amap-jsapi-loader",
+  "react-virtualized",
+  "react-window",
+  "@tanstack/react-query",
+  "@emotion/react",
+  "@emotion/styled",
+  "framer-motion",
+  "react-hook-form",
+  "react-use",
+  "lodash-es",
+];
+
+/**
+ * 在预构建中强制排除的依赖项
+ * 温馨提示：平台推荐的使用方式是哪里需要哪里引入而且都是单个的引入，不需要预构建，直接让浏览器加载就好
+ */
+const exclude = ["@iconify/json"];
+
+export { include, exclude };
