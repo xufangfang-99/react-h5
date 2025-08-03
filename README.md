@@ -46,7 +46,7 @@ cd react-h5-admin
 
 # 安装依赖（请使用 pnpm）
 pnpm install
-```
+```text
 
 ### 开发启动
 
@@ -56,7 +56,7 @@ pnpm dev
 
 # 或者
 pnpm serve
-```
+```text
 
 ### 构建打包
 
@@ -69,7 +69,7 @@ pnpm build:staging
 
 # 构建并生成分析报告
 pnpm report
-```
+```text
 
 ### 其他命令
 
@@ -88,11 +88,12 @@ pnpm lint
 
 # 清理缓存
 pnpm clean:cache
-```
+```text
 
 ## 📂 项目结构
 
 ```
+
 react-h5-admin/
 ├── build/              # 构建相关配置
 │   ├── cdn.ts         # CDN 配置
@@ -128,7 +129,8 @@ react-h5-admin/
 ├── tsconfig.json      # TypeScript 配置
 ├── uno.config.ts      # UnoCSS 配置
 └── vite.config.ts     # Vite 配置
-```
+
+```text
 
 ## 🔧 环境变量
 
@@ -153,7 +155,7 @@ react-h5-admin/
 <div className="flex items-center justify-between p-4">
   <button className="btn-primary">按钮</button>
 </div>
-```
+```text
 
 ### PostCSS 移动端适配
 
@@ -171,7 +173,7 @@ react-h5-admin/
   height: 11.733vw;
   font-size: 3.733vw;
 }
-```
+```text
 
 ### 1px 边框解决方案
 
@@ -181,7 +183,7 @@ react-h5-admin/
 <div className="border-1px">
   1像素边框
 </div>
-```
+```text
 
 ## 🚀 开发指南
 
@@ -194,7 +196,7 @@ import Component from '@/components/Component'
 import { useCustomHook } from '@/hooks/useCustomHook'
 import { api } from '@/services/api'
 import { utils } from '@/utils'
-```
+```text
 
 ### 代码检查器
 
@@ -220,7 +222,7 @@ export default [
     }
   }
 ]
-```
+```text
 
 ### 状态管理
 

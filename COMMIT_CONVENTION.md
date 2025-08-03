@@ -4,7 +4,7 @@
 
 ## 提交格式
 
-```
+```text
 <type>(<scope>): <subject>
 
 <body>
@@ -51,43 +51,43 @@
 
 ```bash
 git commit -m "feat(auth): 添加用户登录功能"
-```
+```text
 
 ### 修复 Bug
 
 ```bash
 git commit -m "fix(utils): 修复日期格式化在 Safari 下的兼容性问题"
-```
+```text
 
 ### 文档更新
 
 ```bash
 git commit -m "docs: 更新 README 中的安装说明"
-```
+```text
 
 ### 代码格式化
 
 ```bash
 git commit -m "style: 格式化所有 TypeScript 文件"
-```
+```text
 
 ### 重构
 
 ```bash
 git commit -m "refactor(api): 重构 API 请求模块，使用 axios 拦截器"
-```
+```text
 
 ### 性能优化
 
 ```bash
 git commit -m "perf(components): 优化长列表滚动性能"
-```
+```text
 
 ### 构建相关
 
 ```bash
 git commit -m "build: 升级 vite 到 v7.0.6"
-```
+```text
 
 ### 包含详细说明的提交
 
@@ -99,7 +99,7 @@ git commit -m "feat(user): 添加用户头像上传功能
 - 自动压缩大于 1MB 的图片
 
 Closes #42"
-```
+```css
 
 ## Git Hooks 说明
 
@@ -131,7 +131,7 @@ git commit -m "fix: 紧急修复" --no-verify
 
 # 跳过 pre-push
 git push --no-verify
-```
+```css
 
 ⚠️ **警告**: 请谨慎使用，确保代码质量！
 
@@ -142,7 +142,7 @@ git push --no-verify
 ```bash
 # 重新安装 husky
 pnpm prepare
-```
+```css
 
 ### 2. lint-staged 运行失败
 
