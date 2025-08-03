@@ -1,17 +1,18 @@
 #!/usr/bin/env node
 
 import fs from "fs";
+import path from "path";
 import { glob } from "glob";
 
 // 定义代码块语言映射
-// const languageMap = {
-//   'bash': ['sh', 'shell', 'zsh'],
-//   'javascript': ['js', 'node'],
-//   'typescript': ['ts'],
-//   'json': ['jsonc'],
-//   'yaml': ['yml'],
-//   'text': ['txt', 'plain', '']
-// };
+const _languageMap = {
+  bash: ["sh", "shell", "zsh"],
+  javascript: ["js", "node"],
+  typescript: ["ts"],
+  json: ["jsonc"],
+  yaml: ["yml"],
+  text: ["txt", "plain", ""],
+};
 
 // 获取合适的语言标识
 function getLanguage(content) {
@@ -69,8 +70,10 @@ function fixMarkdownFile(filePath) {
   let modified = false;
 
   // 跳过包含 HTML 标签的 README.md（这些是徽章，应该保留）
-  // const isReadme = path.basename(filePath).toLowerCase() === 'readme.md';
-  // const hasHtmlBadges = content.includes('<img src="https://img.shields.io/badge/');
+  const _isReadme = path.basename(filePath).toLowerCase() === "readme.md";
+  const _hasHtmlBadges = content.includes(
+    '<img src="https://img.shields.io/badge/',
+  );
 
   // 修复没有语言标识的代码块
   content = content.replace(/```\n([\s\S]*?)```/g, (match, code) => {

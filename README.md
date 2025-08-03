@@ -1,5 +1,6 @@
 # React H5 Mobile Admin
 
+<!-- markdownlint-disable MD033 -->
 <p align="center">
   <img src="https://img.shields.io/badge/React-19.1.0-blue.svg" alt="React">
   <img src="https://img.shields.io/badge/Vite-7.0.6-646CFF.svg" alt="Vite">
@@ -9,6 +10,7 @@
   <img src="https://img.shields.io/badge/pnpm-%E2%89%A59.0.0-F69220.svg" alt="pnpm">
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
 </p>
+<!-- markdownlint-enable MD033 -->
 
 一个基于 React 19 + TypeScript + Vite + Ant Design Mobile 的现代化移动端管理系统模板，专为 H5 应用开发而设计。
 

@@ -5,6 +5,7 @@ import pluginReactHooks from "eslint-plugin-react-hooks";
 import pluginReactRefresh from "eslint-plugin-react-refresh";
 import configPrettier from "eslint-config-prettier";
 import pluginPrettier from "eslint-plugin-prettier";
+import pluginMarkdown from "eslint-plugin-markdown";
 import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
 
@@ -15,7 +16,7 @@ export default defineConfig([
     "*.d.ts",
     "public/*",
     "src/assets/**",
-    "src/**/iconfont/**"
+    "src/**/iconfont/**",
   ]),
   {
     ...js.configs.recommended,
@@ -46,11 +47,11 @@ export default defineConfig([
         WheelEvent: "readonly",
         ImportMetaEnv: "readonly",
         Fn: "readonly",
-        PromiseFn: "readonly"
-      }
+        PromiseFn: "readonly",
+      },
     },
     plugins: {
-      prettier: pluginPrettier
+      prettier: pluginPrettier,
     },
     rules: {
       ...configPrettier.rules,
@@ -60,16 +61,16 @@ export default defineConfig([
         "error",
         {
           argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_"
-        }
+          varsIgnorePattern: "^_",
+        },
       ],
       "prettier/prettier": [
         "error",
         {
-          endOfLine: "auto"
-        }
-      ]
-    }
+          endOfLine: "auto",
+        },
+      ],
+    },
   },
   ...tseslint.config({
     extends: [...tseslint.configs.recommended],
@@ -87,20 +88,20 @@ export default defineConfig([
       "@typescript-eslint/explicit-module-boundary-types": "off",
       "@typescript-eslint/consistent-type-imports": [
         "error",
-        { disallowTypeAnnotations: false, fixStyle: "inline-type-imports" }
+        { disallowTypeAnnotations: false, fixStyle: "inline-type-imports" },
       ],
       "@typescript-eslint/prefer-literal-enum-member": [
         "error",
-        { allowBitwiseExpressions: true }
+        { allowBitwiseExpressions: true },
       ],
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
           argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_"
-        }
-      ]
-    }
+          varsIgnorePattern: "^_",
+        },
+      ],
+    },
   }),
   {
     files: ["**/*.d.ts"],
@@ -108,14 +109,14 @@ export default defineConfig([
       "eslint-comments/no-unlimited-disable": "off",
       "import/no-duplicates": "off",
       "no-restricted-syntax": "off",
-      "unused-imports/no-unused-vars": "off"
-    }
+      "unused-imports/no-unused-vars": "off",
+    },
   },
   {
     files: ["**/*.?([cm])js"],
     rules: {
-      "@typescript-eslint/no-require-imports": "off"
-    }
+      "@typescript-eslint/no-require-imports": "off",
+    },
   },
   {
     files: ["**/*.{ts,tsx,js,jsx}"],
@@ -123,7 +124,7 @@ export default defineConfig([
       "@typescript-eslint": tseslint.plugin,
       react: pluginReact,
       "react-hooks": pluginReactHooks,
-      "react-refresh": pluginReactRefresh
+      "react-refresh": pluginReactRefresh,
     },
     languageOptions: {
       parser: tseslint.parser,
@@ -131,14 +132,14 @@ export default defineConfig([
         ecmaVersion: "latest",
         sourceType: "module",
         ecmaFeatures: {
-          jsx: true
-        }
-      }
+          jsx: true,
+        },
+      },
     },
     settings: {
       react: {
-        version: "detect"
-      }
+        version: "detect",
+      },
     },
     rules: {
       ...pluginReact.configs.recommended.rules,
@@ -146,13 +147,50 @@ export default defineConfig([
       ...pluginReactHooks.configs.recommended.rules,
       "react-refresh/only-export-components": [
         "warn",
-        { allowConstantExport: true }
+        { allowConstantExport: true },
       ],
       "react/prop-types": "off",
       "react/react-in-jsx-scope": "off",
       "react/jsx-uses-react": "off",
       "react/no-unknown-property": "off",
-      "react/display-name": "off"
-    }
-  }
+      "react/display-name": "off",
+    },
+  },
+  // Markdown 文件配置
+  {
+    files: ["**/*.md"],
+    plugins: {
+      markdown: pluginMarkdown,
+    },
+    processor: "markdown/markdown",
+  },
+  // Markdown 中的代码块配置
+  {
+    files: ["**/*.md/*.js", "**/*.md/*.jsx", "**/*.md/*.ts", "**/*.md/*.tsx"],
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: {
+          impliedStrict: true,
+        },
+      },
+    },
+    rules: {
+      // 在 Markdown 代码块中放宽一些规则
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "no-undef": "off",
+      "no-unused-expressions": "off",
+      "@typescript-eslint/no-unused-expressions": "off",
+      "padded-blocks": "off",
+      "import/no-unresolved": "off",
+      "node/no-missing-import": "off",
+      "node/no-missing-require": "off",
+      "node/no-unpublished-import": "off",
+      "node/no-unpublished-require": "off",
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-no-undef": "off",
+      "react-refresh/only-export-components": "off",
+      "prettier/prettier": "off",
+    },
+  },
 ]);
