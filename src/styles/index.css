@@ -28,7 +28,6 @@ body {
 
   /* 防止文字选择 */
   user-select: none;
-  user-select: none;
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
 }

@@ -78,7 +78,9 @@ const wrapperEnv = (envConf: Recordable): ViteEnv => {
     if (envName === "VITE_PORT") {
       realName = Number(realName);
     }
-    ret[envName] = realName;
+    if (envName in ret) {
+      (ret as any)[envName] = realName;
+    }
     if (typeof realName === "string") {
       process.env[envName] = realName;
     } else if (typeof realName === "object") {
@@ -89,9 +91,13 @@ const wrapperEnv = (envConf: Recordable): ViteEnv => {
 };
 
 const fileListTotal: number[] = [];
-
+interface PackageSizeOptions {
+    folder?: string;
+    callback: (size: string | number) => void;
+    format?: boolean;
+  }
 /** 获取指定文件夹中所有文件的总大小 */
-const getPackageSize = (options) => {
+const getPackageSize = (options: PackageSizeOptions) => {
   const { folder = "dist", callback, format = true } = options;
   readdir(folder, (err, files: string[]) => {
     if (err) throw err;
