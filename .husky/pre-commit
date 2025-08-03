@@ -1,1 +1,20 @@
-npm test
+#!/usr/bin/env sh
+
+# 颜色定义
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+echo "🚀 正在进行代码质量检查..."
+
+# 运行 lint-staged
+npx lint-staged
+
+# 检查 lint-staged 的退出码
+if [ $? -ne 0 ]; then
+  echo "${RED}❌ 代码质量检查失败，请修复问题后再提交${NC}"
+  exit 1
+fi
+
+echo "${GREEN}✅ 代码质量检查通过${NC}"
