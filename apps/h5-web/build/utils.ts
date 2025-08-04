@@ -50,6 +50,7 @@ const alias: Record<string, string> = {
   "@services": pathResolve("../src/services"),
   "@assets": pathResolve("../src/assets"),
   "@styles": pathResolve("../src/styles"),
+  "@packages/mobile-utils": pathResolve("../../../packages/mobile-utils/src"),
 };
 
 /** 平台的名称、版本、运行所需的`node`和`pnpm`版本、依赖、最后构建时间的类型提示 */
