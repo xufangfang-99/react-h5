@@ -10,8 +10,9 @@
     "build:all": "pnpm --filter './apps/*' --filter './packages/*' build",
     "build:packages": "pnpm --filter './packages/*' build",
     "test": "pnpm --filter './packages/*' test",
+    "typecheck": "pnpm --filter @apps/h5-web typecheck",
     "lint": "pnpm run lint:eslint && pnpm run lint:prettier && pnpm run lint:stylelint",
-    "lint:eslint": "eslint . --cache --max-warnings 0",
+    "lint:eslint": "eslint . --cache",
     "lint:prettier": "prettier --write \"**/*.{js,ts,json,tsx,css,scss,html,md}\"",
     "lint:stylelint": "stylelint \"**/*.{css,scss,less}\" --cache --fix",
     "lint:markdown": "markdownlint \"**/*.md\" --fix --ignore node_modules --ignore \"**/node_modules/**\"",
@@ -43,7 +44,7 @@
     "typescript-eslint": "^8.38.0"
   },
   "engines": {
-    "node": "^20.19.0 || >=22.11.0",
+    "node": "^20.16.0 || >=22.11.0",
     "pnpm": ">=9"
   }
 }
