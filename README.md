@@ -1,292 +1,250 @@
-# React H5 Mobile Web
+# React H5 Monorepo
 
 <p align="center">
   <img src="https://img.shields.io/badge/React-19.1.0-blue.svg" alt="React">
   <img src="https://img.shields.io/badge/Vite-7.0.6-646CFF.svg" alt="Vite">
   <img src="https://img.shields.io/badge/TypeScript-5.8.3-blue.svg" alt="TypeScript">
-  <img src="https://img.shields.io/badge/Ant_Design_Mobile-5.39.0-1890FF.svg" alt="Ant Design Mobile">
-  <img src="https://img.shields.io/badge/Node-%E2%89%A520.19.0%20||%20%E2%89%A522.11.0-green.svg" alt="Node">
-  <img src="https://img.shields.io/badge/pnpm-%E2%89%A59.0.0-F69220.svg" alt="pnpm">
+  <img src="https://img.shields.io/badge/pnpm_workspace-monorepo-F69220.svg" alt="pnpm workspace">
+  <img src="https://img.shields.io/badge/Node-%E2%89%A520.16.0%20||%20%E2%89%A522.11.0-green.svg" alt="Node">
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
 </p>
 
-一个基于 React 19 + TypeScript + Vite + Ant Design Mobile 的现代化移动端应用，专为 H5 手机用户端开发而设计。
+基于 pnpm workspace 的 Monorepo 项目，包含移动端 H5 应用和共享工具库。
 
-## ✨ 特性
+## 📦 项目结构
 
-- 🚀 **最新技术栈**：React 19 + TypeScript + Vite 7 + SWC
-- 📱 **移动端优化**：专为移动设备设计，支持响应式布局和触摸操作
-- 🎨 **UI 框架**：集成 Ant Design Mobile 5.x，提供丰富的移动端组件
-- 🎯 **TypeScript**：完整的类型定义，提供更好的开发体验
-- ⚡ **快速开发**：Vite + SWC 提供极速的开发体验
-- 🎪 **CSS 方案**：UnoCSS 原子化 CSS + 移动端 vw 适配
-- 📦 **状态管理**：Zustand 轻量级状态管理方案
-- 🔧 **代码规范**：ESLint + Prettier + Husky + Commitlint
-- 🚦 **路由管理**：React Router v7 最新版本
-- 🌐 **网络请求**：Axios + React Query 数据请求方案
-- 🎭 **Mock 支持**：内置 Mock 数据支持
-- 📊 **打包分析**：支持打包体积分析
-- 🔨 **开发工具**：代码检查器、路由警告移除等开发辅助工具
+```
+react-h5-monorepo/
+├── apps/                      # 应用目录
+│   └── h5-web/               # 移动端 H5 应用
+├── packages/                  # 共享包目录
+│   └── mobile-utils/         # 移动端工具库
+├── .husky/                   # Git Hooks
+├── .vscode/                  # VS Code 配置
+├── eslint.config.js          # ESLint 配置
+├── .prettierrc               # Prettier 配置
+├── .stylelintrc.json         # Stylelint 配置
+├── .commitlintrc.json        # Commitlint 配置
+├── package.json              # 根目录配置
+├── pnpm-workspace.yaml       # pnpm 工作区配置
+└── README.md                 # 本文件
+```
 
-## 📦 安装使用
+## 🚀 快速开始
 
 ### 环境要求
 
-- Node.js: ^20.19.0 || >=22.11.0
+- Node.js: ^20.16.0 || >=22.11.0
 - pnpm: >=9.0.0
 
 ### 安装依赖
 
 ```bash
 # 克隆项目
-git clone https://github.com/your-username/react-h5-web.git
+git clone https://github.com/xufangfang-99/react-h5.git
 
 # 进入项目目录
-cd react-h5-web
+cd react-h5
 
-# 安装依赖（请使用 pnpm）
+# 安装所有依赖
 pnpm install
 ```
 
-### 开发启动
+### 开发命令
 
 ```bash
-# 启动开发服务器
+# 启动 H5 应用开发服务器
 pnpm dev
 
-# 或者
-pnpm serve
-```
+# 启动所有应用（如果有多个）
+pnpm dev:all
 
-### 构建打包
-
-```bash
-# 构建生产环境
+# 构建 H5 应用
 pnpm build
 
-# 构建测试环境
-pnpm build:staging
+# 构建所有项目
+pnpm build:all
 
-# 构建并生成分析报告
-pnpm report
-```
-
-### 其他命令
-
-```bash
-# 预览构建结果
-pnpm preview
-
-# 构建并预览
-pnpm preview:build
+# 代码检查
+pnpm lint
 
 # 类型检查
 pnpm typecheck
-
-# 代码格式化
-pnpm lint
-
-# 清理缓存
-pnpm clean:cache
 ```
 
-## 📂 项目结构
+## 📁 子项目说明
 
-```text
-react-h5-web/
-├── build/              # 构建相关配置
-│   ├── cdn.ts         # CDN 配置
-│   ├── compress.ts    # 压缩配置
-│   ├── info.ts        # 构建信息
-│   ├── optimize.ts    # 依赖优化配置
-│   ├── plugins.ts     # Vite 插件配置
-│   └── utils.ts       # 构建工具函数
-├── envs/              # 环境变量配置
-│   ├── .env           # 基础环境变量
-│   ├── .env.development    # 开发环境
-│   ├── .env.production     # 生产环境
-│   └── .env.staging        # 测试环境
-├── mock/              # Mock 数据
-├── public/            # 静态资源
-├── src/               # 源代码
-│   ├── assets/        # 静态资源
-│   ├── components/    # 公共组件
-│   ├── hooks/         # 自定义 Hooks
-│   ├── pages/         # 页面组件
-│   ├── router/        # 路由配置
-│   ├── services/      # API 服务
-│   ├── store/         # 状态管理
-│   ├── styles/        # 全局样式
-│   ├── utils/         # 工具函数
-│   ├── App.tsx        # 根组件
-│   └── main.tsx       # 入口文件
-├── types/             # TypeScript 类型定义
-├── .eslintrc.js       # ESLint 配置
-├── .prettierrc        # Prettier 配置
-├── index.html         # HTML 模板
-├── package.json       # 项目配置
-├── tsconfig.json      # TypeScript 配置
-├── uno.config.ts      # UnoCSS 配置
-└── vite.config.ts     # Vite 配置
-```
+### apps/h5-web
 
-## 🔧 环境变量
+移动端 H5 应用，基于 React 19 + Vite + Ant Design Mobile 构建。
 
-项目使用 `envs` 文件夹管理环境变量：
+**特性：**
 
-| 变量名              | 说明               | 默认值 |
-| ------------------- | ------------------ | ------ |
-| VITE_PORT           | 开发服务器端口     | 3000   |
-| VITE_PUBLIC_PATH    | 公共路径           | /      |
-| VITE_ROUTER_HISTORY | 路由模式 (hash/h5) | hash   |
-| VITE_CDN            | 是否使用 CDN       | false  |
-| VITE_COMPRESSION    | 压缩方式           | none   |
-| VITE_HIDE_HOME      | 是否隐藏首页       | false  |
+- 🎨 Ant Design Mobile UI 组件库
+- 📱 移动端优化（vw 适配、手势支持等）
+- ⚡ Vite + SWC 极速开发体验
+- 🎪 UnoCSS 原子化 CSS
 
-## 🎨 样式方案
+[查看详细文档](./apps/h5-web/README.md)
 
-### UnoCSS 原子化 CSS
+### packages/mobile-utils
 
-项目集成了 UnoCSS，提供原子化 CSS 能力：
+移动端常用工具库，提供设备检测、手势识别、网络状态等功能。
 
-```jsx
-<div className="flex items-center justify-between p-4">
-  <button className="btn-primary">按钮</button>
-</div>
-```
+**功能模块：**
 
-### 移动端适配方案
+- 📱 设备检测（Device）
+- 👆 手势识别（Gesture）
+- 🌐 网络状态（Network）
+- 💾 存储增强（Storage）
+- 🔧 格式化工具（Format）
+- 🎯 DOM 操作（DOM）
+- ⚛️ React Hooks
 
-使用 vw 单位进行移动端适配：
+[查看详细文档](./packages/mobile-utils/README.md)
 
-```css
-/* 设计稿基准：375px */
-/* 1px = 0.267vw (100vw / 375px) */
+## 🛠️ 开发指南
 
-/* 直接使用 vw 单位 */
-.header {
-  height: 11.733vw; /* 44px */
-  font-size: 4.267vw; /* 16px */
-}
-
-/* 或使用 UnoCSS */
-<div class="h-[11.733vw] text-[4.267vw]">
-```
-
-### 1px 边框解决方案
-
-内置 1px 边框解决方案：
-
-```jsx
-<div className="border-1px">1像素边框</div>
-```
-
-## 🚀 开发指南
-
-### 路径别名
-
-项目配置了以下路径别名，方便导入：
-
-```typescript
-import Component from "@/components/Component";
-import { useCustomHook } from "@/hooks/useCustomHook";
-import { api } from "@/services/api";
-import { utils } from "@/utils";
-```
-
-### 代码检查器
-
-开发环境下，按住组合键可以快速定位代码：
-
-- Mac: `Option + Shift`
-- Windows: `Alt + Shift`
-
-### Mock 数据
-
-在 `mock` 文件夹创建 mock 文件：
-
-```typescript
-// mock/user.ts
-export default [
-  {
-    url: "/api/user/list",
-    method: "get",
-    response: () => {
-      return {
-        code: 200,
-        data: [],
-      };
-    },
-  },
-];
-```
-
-### 状态管理
-
-使用 Zustand 进行状态管理：
-
-```typescript
-// store/user.ts
-import { create } from "zustand";
-
-export const useUserStore = create((set) => ({
-  user: null,
-  setUser: (user) => set({ user }),
-}));
-```
-
-## 📱 移动端优化
-
-- **视口适配**：自动 px 转 vw
-- **安全区域**：支持 iPhone 刘海屏适配
-- **触摸优化**：禁用双击缩放，优化触摸反馈
-- **性能优化**：路由懒加载，组件按需引入
-- **手势支持**：集成 Framer Motion 动画库
-
-## 🔨 构建优化
-
-- **依赖预构建**：优化常用依赖加载速度
-- **代码分割**：自动代码分割，按需加载
-- **压缩支持**：支持 gzip/brotli 压缩
-- **CDN 支持**：生产环境可配置 CDN 加速
-- **打包分析**：可视化打包体积分析
-
-## 🔧 代码规范
-
-本项目使用严格的代码规范，通过 Git Hooks 自动执行：
-
-- **ESLint**: TypeScript/JavaScript 代码质量检查
-- **Prettier**: 代码格式化
-- **Stylelint**: CSS/SCSS 样式规范
-- **Markdownlint**: Markdown 文档格式
-- **Commitlint**: Git 提交信息规范
-
-详细的提交规范请查看 [COMMIT_CONVENTION.md](./COMMIT_CONVENTION.md)
-
-### 常用命令
+### 添加新应用
 
 ```bash
-# 运行所有 lint 检查
-pnpm lint
+# 在 apps 目录下创建新应用
+cd apps
+pnpm create vite my-app --template react-ts
+```
 
-# 单独运行各项检查
-pnpm lint:eslint
-pnpm lint:prettier
-pnpm lint:stylelint
-pnpm lint:markdown
+### 添加新包
 
-# 修复 Markdown 文件
-pnpm fix:markdown
+```bash
+# 在 packages 目录下创建新包
+mkdir packages/my-package
+cd packages/my-package
+pnpm init
+```
+
+### 依赖管理
+
+```bash
+# 给根目录添加依赖
+pnpm add -D -w eslint
+
+# 给特定应用添加依赖
+pnpm --filter @apps/h5-web add axios
+
+# 给特定包添加依赖
+pnpm --filter @packages/mobile-utils add -D @types/node
+
+# 添加内部依赖
+pnpm --filter @apps/h5-web add @packages/mobile-utils
+```
+
+### 运行特定项目命令
+
+```bash
+# 运行特定应用的命令
+pnpm --filter @apps/h5-web dev
+pnpm --filter @apps/h5-web build
+
+# 运行特定包的命令
+pnpm --filter @packages/mobile-utils build
+pnpm --filter @packages/mobile-utils test
+```
+
+## 🔧 配置说明
+
+### pnpm Workspace
+
+`pnpm-workspace.yaml` 定义了 Monorepo 的工作区：
+
+```yaml
+packages:
+  - "apps/*"
+  - "packages/*"
+```
+
+### 代码规范
+
+项目使用统一的代码规范：
+
+- **ESLint**: JavaScript/TypeScript 代码检查
+- **Prettier**: 代码格式化
+- **Stylelint**: CSS 样式检查
+- **Commitlint**: Git 提交信息规范
+
+所有配置文件都在根目录，对所有子项目生效。
+
+### Git Hooks
+
+使用 Husky + lint-staged 自动执行代码检查：
+
+- **pre-commit**: 代码格式检查和修复
+- **commit-msg**: 提交信息规范检查
+- **pre-push**: TypeScript 类型检查
+
+## 📝 提交规范
+
+遵循 [Conventional Commits](https://www.conventionalcommits.org/) 规范：
+
+```bash
+# 新功能
+git commit -m "feat: 添加用户登录功能"
+
+# 修复问题
+git commit -m "fix: 修复移动端滑动问题"
+
+# 文档更新
+git commit -m "docs: 更新 README"
+
+# 重大变更
+git commit -m "feat!: 重构路由系统
+
+BREAKING CHANGE: 路由配置方式发生变化"
+```
+
+详细规范请查看 [COMMIT_CONVENTION.md](./COMMIT_CONVENTION.md)
+
+## 🚀 部署
+
+### 构建产物
+
+```bash
+# 构建所有项目
+pnpm build:all
+
+# H5 应用构建产物
+apps/h5-web/dist/
+
+# 工具库构建产物
+packages/mobile-utils/dist/
+```
+
+### Docker 部署（示例）
+
+```dockerfile
+FROM node:20-alpine
+WORKDIR /app
+COPY . .
+RUN npm install -g pnpm
+RUN pnpm install --frozen-lockfile
+RUN pnpm build:all
+# ... 后续部署步骤
 ```
 
 ## 🤝 贡献指南
 
 1. Fork 本仓库
-2. 创建你的特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交你的修改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
+2. 创建特性分支 (`git checkout -b feature/amazing-feature`)
+3. 提交改动 (`git commit -m 'feat: add amazing feature'`)
+4. 推送到分支 (`git push origin feature/amazing-feature`)
 5. 提交 Pull Request
 
 ## 📄 License
 
 [MIT](LICENSE) © 2025
+
+## 🔗 相关链接
+
+- [pnpm Workspace 文档](https://pnpm.io/workspaces)
+- [Vite 文档](https://vitejs.dev/)
+- [React 文档](https://react.dev/)
+- [TypeScript 文档](https://www.typescriptlang.org/)
