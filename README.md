@@ -1,4 +1,4 @@
-# React H5 Mobile Admin
+# React H5 Mobile Web
 
 <p align="center">
   <img src="https://img.shields.io/badge/React-19.1.0-blue.svg" alt="React">
@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
 </p>
 
-一个基于 React 19 + TypeScript + Vite + Ant Design Mobile 的现代化移动端管理系统模板，专为 H5 应用开发而设计。
+一个基于 React 19 + TypeScript + Vite + Ant Design Mobile 的现代化移动端应用，专为 H5 手机用户端开发而设计。
 
 ## ✨ 特性
 
@@ -39,10 +39,10 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/your-username/react-h5-admin.git
+git clone https://github.com/your-username/react-h5-web.git
 
 # 进入项目目录
-cd react-h5-admin
+cd react-h5-web
 
 # 安装依赖（请使用 pnpm）
 pnpm install
@@ -93,7 +93,7 @@ pnpm clean:cache
 ## 📂 项目结构
 
 ```text
-react-h5-admin/
+react-h5-web/
 ├── build/              # 构建相关配置
 │   ├── cdn.ts         # CDN 配置
 │   ├── compress.ts    # 压缩配置
