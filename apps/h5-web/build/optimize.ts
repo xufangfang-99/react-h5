@@ -26,8 +26,10 @@ const include = [
   "react-use",
   "lodash-es",
   "@packages/mobile-utils",
-  "antd-mobile",
-  "antd-mobile-icons",
+  "@mantine/core",
+  "@mantine/hooks",
+  "@mantine/notifications",
+  "@tabler/icons-react",
 ];
 
 /**

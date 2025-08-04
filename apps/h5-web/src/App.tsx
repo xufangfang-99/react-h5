@@ -1,89 +1,132 @@
 import { useState } from "react";
-import { TabBar } from "antd-mobile";
 import {
-  AppOutline,
-  UnorderedListOutline,
-  UserOutline,
-} from "antd-mobile-icons";
+  AppShell,
+  Tabs,
+  rem,
+  Card,
+  Text,
+  Title,
+  SimpleGrid,
+  Box,
+  Center,
+  Stack,
+  Avatar,
+} from "@mantine/core";
+import {
+  IconHome,
+  IconList,
+  IconUser,
+  IconDeviceMobile,
+  IconBolt,
+} from "@tabler/icons-react";
 import MobileUtilsDemo from "./pages/MobileUtilsDemo";
 
 function App() {
-  const [activeKey, setActiveKey] = useState("demo");
+  const [activeTab, setActiveTab] = useState("demo");
 
-  const tabs = [
-    {
-      key: "home",
-      title: "首页",
-      icon: <AppOutline />,
-    },
-    {
-      key: "demo",
-      title: "工具演示",
-      icon: <UnorderedListOutline />,
-    },
-    {
-      key: "user",
-      title: "我的",
-      icon: <UserOutline />,
-    },
-  ];
+  const iconStyle = { width: rem(20), height: rem(20) };
+
+  const handleTabChange = (value: string | null) => {
+    if (value !== null) {
+      setActiveTab(value);
+    }
+  };
 
   return (
-    <div className="mobile-container">
-      <div className="flex-1 overflow-auto">
-        {activeKey === "home" && (
-          <div className="p-4">
-            <header className="bg-primary-500 text-white p-4 rounded-lg mb-4">
-              <h1 className="text-lg font-bold text-center">React H5 Web</h1>
-            </header>
+    <AppShell
+      header={{ height: 0 }}
+      navbar={{ width: 0, breakpoint: 0 }}
+      padding={0}
+    >
+      <Box className="mobile-container">
+        <Box className="flex-1 overflow-auto">
+          {activeTab === "home" && (
+            <Box p="md">
+              <Card
+                shadow="sm"
+                padding="lg"
+                radius="md"
+                className="bg-primary-500 text-white mb-4"
+              >
+                <Title order={3} ta="center" c="white">
+                  React H5 Web
+                </Title>
+              </Card>
 
-            <div className="bg-white rounded-lg p-4 mb-4 border-1px">
-              <h2 className="text-base font-semibold mb-2">欢迎使用</h2>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                这是一个基于 Vite + React + TypeScript + UnoCSS 构建的现代化 H5
-                项目模板。
-              </p>
-            </div>
+              <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+                <Title order={4} mb="sm">
+                  欢迎使用
+                </Title>
+                <Text size="sm" c="dimmed">
+                  这是一个基于 Vite + React + TypeScript + UnoCSS 构建的现代化
+                  H5 项目模板。
+                </Text>
+              </Card>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-lg p-4 border-1px flex-center flex-col">
-                <div className="w-12 h-12 bg-primary-100 rounded-full flex-center mb-2">
-                  <span className="text-primary-500 text-lg">📱</span>
-                </div>
-                <span className="text-sm text-gray-700">移动端优化</span>
-              </div>
+              <SimpleGrid cols={2} spacing="md">
+                <Card shadow="sm" padding="lg" radius="md" withBorder>
+                  <Stack align="center" gap="xs">
+                    <Center className="w-12 h-12 bg-primary-100 rounded-full">
+                      <IconDeviceMobile
+                        size={24}
+                        className="text-primary-500"
+                      />
+                    </Center>
+                    <Text size="sm">移动端优化</Text>
+                  </Stack>
+                </Card>
 
-              <div className="bg-white rounded-lg p-4 border-1px flex-center flex-col">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex-center mb-2">
-                  <span className="text-green-500 text-lg">⚡</span>
-                </div>
-                <span className="text-sm text-gray-700">极速开发</span>
-              </div>
-            </div>
-          </div>
-        )}
+                <Card shadow="sm" padding="lg" radius="md" withBorder>
+                  <Stack align="center" gap="xs">
+                    <Center className="w-12 h-12 bg-green-100 rounded-full">
+                      <IconBolt size={24} className="text-green-500" />
+                    </Center>
+                    <Text size="sm">极速开发</Text>
+                  </Stack>
+                </Card>
+              </SimpleGrid>
+            </Box>
+          )}
 
-        {activeKey === "demo" && <MobileUtilsDemo />}
+          {activeTab === "demo" && <MobileUtilsDemo />}
 
-        {activeKey === "user" && (
-          <div className="p-4">
-            <div className="bg-white rounded-lg p-6 text-center">
-              <div className="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-4 flex-center">
-                <UserOutline fontSize={32} color="#999" />
-              </div>
-              <h2 className="text-lg font-semibold mb-2">用户中心</h2>
-              <p className="text-gray-500 text-sm">暂未登录</p>
-            </div>
-          </div>
-        )}
-      </div>
+          {activeTab === "user" && (
+            <Box p="md">
+              <Card shadow="sm" padding="xl" radius="md" withBorder ta="center">
+                <Avatar size={80} radius="xl" mx="auto" mb="md" color="gray">
+                  <IconUser size={40} />
+                </Avatar>
+                <Title order={4} mb="sm">
+                  用户中心
+                </Title>
+                <Text size="sm" c="dimmed">
+                  暂未登录
+                </Text>
+              </Card>
+            </Box>
+          )}
+        </Box>
 
-      <TabBar activeKey={activeKey} onChange={setActiveKey}>
-        {tabs.map((item) => (
-          <TabBar.Item key={item.key} icon={item.icon} title={item.title} />
-        ))}
-      </TabBar>
-    </div>
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          variant="default"
+          className="border-t"
+        >
+          <Tabs.List grow>
+            <Tabs.Tab value="home" leftSection={<IconHome style={iconStyle} />}>
+              首页
+            </Tabs.Tab>
+            <Tabs.Tab value="demo" leftSection={<IconList style={iconStyle} />}>
+              工具演示
+            </Tabs.Tab>
+            <Tabs.Tab value="user" leftSection={<IconUser style={iconStyle} />}>
+              我的
+            </Tabs.Tab>
+          </Tabs.List>
+        </Tabs>
+      </Box>
+    </AppShell>
   );
 }
 

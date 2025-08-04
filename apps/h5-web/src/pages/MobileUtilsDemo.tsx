@@ -1,16 +1,22 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import {
   Button,
   Card,
-  List,
-  Toast,
-  Space,
+  Text,
   Divider,
-  Tag,
-  Input,
-  Dialog,
+  Badge,
+  TextInput,
   Tabs,
-} from "antd-mobile";
+  Title,
+  Group,
+  Stack,
+  Box,
+  Modal,
+  Code,
+  Table,
+  ScrollArea,
+} from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import {
   // 设备检测
   getDeviceInfo,
@@ -61,12 +67,13 @@ import {
 } from "@packages/mobile-utils";
 
 export default function MobileUtilsDemo() {
-  const [activeTab, setActiveTab] = useState("device");
   const [phone, setPhone] = useState("13812345678");
   const [money, setMoney] = useState("1234.56");
   const [bankCard, setBankCard] = useState("6222021234567890123");
   const [storageKey, setStorageKey] = useState("testKey");
   const [storageValue, setStorageValue] = useState("testValue");
+  const [modalOpened, setModalOpened] = useState(false);
+  const [modalContent, setModalContent] = useState("");
 
   // Hooks 使用
   const deviceInfo = useDeviceInfo();
@@ -81,22 +88,22 @@ export default function MobileUtilsDemo() {
   // 手势识别 ref
   const swipeRef = useGesture<HTMLDivElement>({
     onSwipeLeft: () => {
-      Toast.show("向左滑动");
+      notifications.show({ message: "向左滑动", color: "blue" });
     },
     onSwipeRight: () => {
-      Toast.show("向右滑动");
+      notifications.show({ message: "向右滑动", color: "blue" });
     },
     onSwipeUp: () => {
-      Toast.show("向上滑动");
+      notifications.show({ message: "向上滑动", color: "blue" });
     },
     onSwipeDown: () => {
-      Toast.show("向下滑动");
+      notifications.show({ message: "向下滑动", color: "blue" });
     },
     onTap: () => {
-      Toast.show("点击");
+      notifications.show({ message: "点击", color: "green" });
     },
     onLongPress: () => {
-      Toast.show("长按");
+      notifications.show({ message: "长按", color: "orange" });
     },
   });
 
@@ -108,7 +115,7 @@ export default function MobileUtilsDemo() {
     new Date(Date.now() + 60 * 60 * 1000), // 1小时后
     {
       onComplete: () => {
-        Toast.show("倒计时结束");
+        notifications.show({ message: "倒计时结束", color: "red" });
       },
     },
   );
@@ -121,248 +128,298 @@ export default function MobileUtilsDemo() {
   const [throttleValue, setThrottleValue] = useState("");
   const throttledValue = useThrottle(throttleValue, 1000);
 
-  return (
-    <div className="p-4 pb-20">
-      <h1 className="text-xl font-bold mb-4">Mobile Utils 功能演示</h1>
+  const showModal = (content: string) => {
+    setModalContent(content);
+    setModalOpened(true);
+  };
 
-      <Tabs activeKey={activeTab} onChange={setActiveTab}>
-        <Tabs.Tab title="设备检测" key="device">
-          <Card title="设备信息" className="mb-4">
-            <List>
-              <List.Item extra={deviceInfo.isMobile ? "是" : "否"}>
-                是否移动设备
-              </List.Item>
-              <List.Item
-                extra={
-                  deviceInfo.isIOS
-                    ? "iOS"
-                    : deviceInfo.isAndroid
-                      ? "Android"
-                      : "其他"
-                }
-              >
-                操作系统
-              </List.Item>
-              <List.Item extra={deviceInfo.isWeChat ? "是" : "否"}>
-                微信环境
-              </List.Item>
-              <List.Item extra={deviceInfo.isIPhoneX ? "是" : "否"}>
-                刘海屏
-              </List.Item>
-              <List.Item extra={deviceInfo.orientation}>屏幕方向</List.Item>
-              <List.Item
-                extra={`${deviceInfo.screenWidth} x ${deviceInfo.screenHeight}`}
-              >
-                屏幕尺寸
-              </List.Item>
-              <List.Item extra={deviceInfo.pixelRatio}>像素密度</List.Item>
-            </List>
+  const deviceRows = [
+    { key: "是否移动设备", value: deviceInfo.isMobile ? "是" : "否" },
+    {
+      key: "操作系统",
+      value: deviceInfo.isIOS
+        ? "iOS"
+        : deviceInfo.isAndroid
+          ? "Android"
+          : "其他",
+    },
+    { key: "微信环境", value: deviceInfo.isWeChat ? "是" : "否" },
+    { key: "刘海屏", value: deviceInfo.isIPhoneX ? "是" : "否" },
+    { key: "屏幕方向", value: deviceInfo.orientation },
+    {
+      key: "屏幕尺寸",
+      value: `${deviceInfo.screenWidth} x ${deviceInfo.screenHeight}`,
+    },
+    { key: "像素密度", value: deviceInfo.pixelRatio },
+  ];
+
+  const networkRows = [
+    { key: "网络状态", value: networkStatus.online ? "在线" : "离线" },
+    { key: "网络类型", value: networkStatus.type },
+    { key: "有效类型", value: networkStatus.effectiveType || "未知" },
+    {
+      key: "下行速度",
+      value: networkStatus.downlink ? `${networkStatus.downlink} Mbps` : "未知",
+    },
+    {
+      key: "延迟",
+      value: networkStatus.rtt ? `${networkStatus.rtt} ms` : "未知",
+    },
+    { key: "省流模式", value: networkStatus.saveData ? "是" : "否" },
+  ];
+
+  return (
+    <Box p="md" pb={80}>
+      <Title order={3} mb="md">
+        Mobile Utils 功能演示
+      </Title>
+
+      <Tabs defaultValue="device">
+        <Tabs.List>
+          <Tabs.Tab value="device">设备检测</Tabs.Tab>
+          <Tabs.Tab value="gesture">手势识别</Tabs.Tab>
+          <Tabs.Tab value="network">网络状态</Tabs.Tab>
+          <Tabs.Tab value="storage">存储工具</Tabs.Tab>
+          <Tabs.Tab value="format">格式化</Tabs.Tab>
+          <Tabs.Tab value="dom">DOM操作</Tabs.Tab>
+          <Tabs.Tab value="hooks">Hooks</Tabs.Tab>
+        </Tabs.List>
+
+        <Tabs.Panel value="device" pt="md">
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              设备信息
+            </Title>
+            <Table>
+              <Table.Tbody>
+                {deviceRows.map((row) => (
+                  <Table.Tr key={row.key}>
+                    <Table.Td>{row.key}</Table.Td>
+                    <Table.Td>{row.value}</Table.Td>
+                  </Table.Tr>
+                ))}
+              </Table.Tbody>
+            </Table>
           </Card>
 
-          <Card title="静态方法测试">
-            <Space direction="vertical" className="w-full">
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Title order={5} mb="md">
+              静态方法测试
+            </Title>
+            <Stack gap="sm">
               <Button
                 onClick={() => {
                   const info = getDeviceInfo();
-                  Dialog.alert({
-                    content: JSON.stringify(info, null, 2),
-                  });
+                  showModal(JSON.stringify(info, null, 2));
                 }}
+                fullWidth
               >
                 获取完整设备信息
               </Button>
-              <div className="flex gap-2 flex-wrap">
+              <Group grow>
                 <Button
-                  size="small"
+                  size="sm"
+                  variant="light"
                   onClick={() => {
-                    Toast.show(`iOS: ${isIOS()}`);
+                    notifications.show({ message: `iOS: ${isIOS()}` });
                   }}
                 >
                   检测 iOS
                 </Button>
                 <Button
-                  size="small"
+                  size="sm"
+                  variant="light"
                   onClick={() => {
-                    Toast.show(`Android: ${isAndroid()}`);
+                    notifications.show({ message: `Android: ${isAndroid()}` });
                   }}
                 >
                   检测 Android
                 </Button>
+              </Group>
+              <Group grow>
                 <Button
-                  size="small"
+                  size="sm"
+                  variant="light"
                   onClick={() => {
-                    Toast.show(`微信: ${isWeChat()}`);
+                    notifications.show({ message: `微信: ${isWeChat()}` });
                   }}
                 >
                   检测微信
                 </Button>
                 <Button
-                  size="small"
+                  size="sm"
+                  variant="light"
                   onClick={() => {
-                    Toast.show(`刘海屏: ${isIPhoneX()}`);
+                    notifications.show({ message: `刘海屏: ${isIPhoneX()}` });
                   }}
                 >
                   检测刘海屏
                 </Button>
-                <Button
-                  size="small"
-                  onClick={() => {
-                    Toast.show(`屏幕方向: ${getScreenOrientation()}`);
-                  }}
-                >
-                  获取屏幕方向
-                </Button>
-              </div>
-            </Space>
+              </Group>
+              <Button
+                size="sm"
+                variant="light"
+                onClick={() => {
+                  notifications.show({
+                    message: `屏幕方向: ${getScreenOrientation()}`,
+                  });
+                }}
+                fullWidth
+              >
+                获取屏幕方向
+              </Button>
+            </Stack>
           </Card>
-        </Tabs.Tab>
+        </Tabs.Panel>
 
-        <Tabs.Tab title="手势识别" key="gesture">
-          <Card title="手势测试区域" className="mb-4">
-            <div
+        <Tabs.Panel value="gesture" pt="md">
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              手势测试区域
+            </Title>
+            <Box
               ref={swipeRef}
               className="h-48 bg-primary-100 rounded-lg flex-center relative"
             >
-              <p className="text-gray-600">在此区域进行手势操作</p>
-              <p className="text-sm text-gray-500 mt-2">
-                支持：滑动、点击、长按
-              </p>
-            </div>
+              <Stack align="center" gap="xs">
+                <Text c="dimmed">在此区域进行手势操作</Text>
+                <Text size="sm" c="dimmed">
+                  支持：滑动、点击、长按
+                </Text>
+              </Stack>
+            </Box>
           </Card>
 
-          <Card title="独立手势绑定" className="mb-4">
-            <div className="space-y-4">
-              <div
-                ref={useRef<HTMLDivElement>(null)}
-                className="h-24 bg-green-100 rounded-lg flex-center"
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Title order={5} mb="md">
+              独立手势绑定
+            </Title>
+            <Stack gap="md">
+              <Box
+                className="h-24 bg-green-100 rounded-lg flex-center cursor-pointer"
                 onClick={() => {
                   const element = document.querySelector("#gesture-test");
                   if (element) {
                     const cleanup = onSwipe(element as HTMLElement, (event) => {
-                      Toast.show(`滑动方向: ${event.direction}`);
+                      notifications.show({
+                        message: `滑动方向: ${event.direction}`,
+                      });
                     });
                     setTimeout(cleanup, 10000); // 10秒后自动清理
                   }
                 }}
                 id="gesture-test"
               >
-                <p className="text-sm">点击激活滑动识别（10秒后失效）</p>
-              </div>
+                <Text size="sm">点击激活滑动识别（10秒后失效）</Text>
+              </Box>
 
-              <div
-                className="h-24 bg-blue-100 rounded-lg flex-center"
+              <Box
+                className="h-24 bg-blue-100 rounded-lg flex-center cursor-pointer"
                 onClick={(e) => {
                   const element = e.currentTarget;
                   const cleanup = onTap(element, (event) => {
-                    Toast.show(`点击位置: x=${event.x}, y=${event.y}`);
+                    notifications.show({
+                      message: `点击位置: x=${event.x}, y=${event.y}`,
+                    });
                   });
                   setTimeout(cleanup, 5000);
                 }}
               >
-                <p className="text-sm">点击激活点击监听（5秒后失效）</p>
-              </div>
+                <Text size="sm">点击激活点击监听（5秒后失效）</Text>
+              </Box>
 
-              <div
-                className="h-24 bg-purple-100 rounded-lg flex-center"
+              <Box
+                className="h-24 bg-purple-100 rounded-lg flex-center cursor-pointer"
                 onClick={(e) => {
                   const element = e.currentTarget;
                   const cleanup = onLongPress(element, (event) => {
-                    Toast.show(`长按 ${event.duration}ms`);
+                    notifications.show({
+                      message: `长按 ${event.duration}ms`,
+                    });
                   });
                   setTimeout(cleanup, 5000);
                 }}
               >
-                <p className="text-sm">点击激活长按监听（5秒后失效）</p>
-              </div>
-            </div>
+                <Text size="sm">点击激活长按监听（5秒后失效）</Text>
+              </Box>
+            </Stack>
           </Card>
-        </Tabs.Tab>
+        </Tabs.Panel>
 
-        <Tabs.Tab title="网络状态" key="network">
-          <Card title="网络信息" className="mb-4">
-            <List>
-              <List.Item extra={networkStatus.online ? "在线" : "离线"}>
-                网络状态
-              </List.Item>
-              <List.Item extra={networkStatus.type}>网络类型</List.Item>
-              <List.Item extra={networkStatus.effectiveType || "未知"}>
-                有效类型
-              </List.Item>
-              <List.Item
-                extra={
-                  networkStatus.downlink
-                    ? `${networkStatus.downlink} Mbps`
-                    : "未知"
-                }
-              >
-                下行速度
-              </List.Item>
-              <List.Item
-                extra={networkStatus.rtt ? `${networkStatus.rtt} ms` : "未知"}
-              >
-                延迟
-              </List.Item>
-              <List.Item extra={networkStatus.saveData ? "是" : "否"}>
-                省流模式
-              </List.Item>
-            </List>
+        <Tabs.Panel value="network" pt="md">
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              网络信息
+            </Title>
+            <Table>
+              <Table.Tbody>
+                {networkRows.map((row) => (
+                  <Table.Tr key={row.key}>
+                    <Table.Td>{row.key}</Table.Td>
+                    <Table.Td>{row.value}</Table.Td>
+                  </Table.Tr>
+                ))}
+              </Table.Tbody>
+            </Table>
           </Card>
 
-          <Card title="网络建议" className="mb-4">
-            <Space direction="vertical" className="w-full">
-              <div className="flex-between">
-                <span>慢速网络：</span>
-                <Tag color={isSlowNetwork() ? "danger" : "success"}>
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Title order={5} mb="md">
+              网络建议
+            </Title>
+            <Stack gap="sm">
+              <Group justify="space-between">
+                <Text>慢速网络：</Text>
+                <Badge color={isSlowNetwork() ? "red" : "green"}>
                   {isSlowNetwork() ? "是" : "否"}
-                </Tag>
-              </div>
-              <div className="flex-between">
-                <span>推荐图片质量：</span>
-                <Tag color="primary">{getRecommendedImageQuality()}</Tag>
-              </div>
+                </Badge>
+              </Group>
+              <Group justify="space-between">
+                <Text>推荐图片质量：</Text>
+                <Badge color="blue">{getRecommendedImageQuality()}</Badge>
+              </Group>
               <Button
                 onClick={() => {
                   const info = getNetworkInfo();
-                  Dialog.alert({
-                    title: "完整网络信息",
-                    content: JSON.stringify(info, null, 2),
-                  });
+                  showModal(JSON.stringify(info, null, 2));
                 }}
-                block
+                fullWidth
               >
                 获取网络详情
               </Button>
-            </Space>
+            </Stack>
           </Card>
-        </Tabs.Tab>
+        </Tabs.Panel>
 
-        <Tabs.Tab title="存储工具" key="storage">
-          <Card title="本地存储" className="mb-4">
-            <div className="space-y-4">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">键名</p>
-                <Input
-                  value={storageKey}
-                  onChange={setStorageKey}
-                  placeholder="输入键名"
-                />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600 mb-1">键值</p>
-                <Input
-                  value={storageValue}
-                  onChange={setStorageValue}
-                  placeholder="输入值"
-                />
-              </div>
-              <Space>
+        <Tabs.Panel value="storage" pt="md">
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              本地存储
+            </Title>
+            <Stack gap="md">
+              <TextInput
+                label="键名"
+                value={storageKey}
+                onChange={(e) => setStorageKey(e.currentTarget.value)}
+                placeholder="输入键名"
+              />
+              <TextInput
+                label="键值"
+                value={storageValue}
+                onChange={(e) => setStorageValue(e.currentTarget.value)}
+                placeholder="输入值"
+              />
+              <Group>
                 <Button
                   onClick={() => {
                     localStorage.set(storageKey, storageValue, 60000); // 1分钟过期
-                    Toast.show("保存成功（1分钟后过期）");
+                    notifications.show({
+                      message: "保存成功（1分钟后过期）",
+                      color: "green",
+                    });
                   }}
-                  color="primary"
-                  size="small"
+                  color="green"
+                  size="sm"
                 >
                   保存
                 </Button>
@@ -370,30 +427,42 @@ export default function MobileUtilsDemo() {
                   onClick={() => {
                     const value = localStorage.get(storageKey);
                     if (value) {
-                      Toast.show(`读取成功: ${value}`);
+                      notifications.show({
+                        message: `读取成功: ${value}`,
+                        color: "blue",
+                      });
                     } else {
-                      Toast.show("无数据或已过期");
+                      notifications.show({
+                        message: "无数据或已过期",
+                        color: "red",
+                      });
                     }
                   }}
-                  size="small"
+                  size="sm"
                 >
                   读取
                 </Button>
                 <Button
                   onClick={() => {
                     localStorage.remove(storageKey);
-                    Toast.show("删除成功");
+                    notifications.show({
+                      message: "删除成功",
+                      color: "orange",
+                    });
                   }}
-                  size="small"
-                  color="danger"
+                  size="sm"
+                  color="red"
                 >
                   删除
                 </Button>
-              </Space>
-            </div>
+              </Group>
+            </Stack>
           </Card>
 
-          <Card title="会话存储" className="mb-4">
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              会话存储
+            </Title>
             <Button
               onClick={() => {
                 sessionStorage.set("session-data", {
@@ -401,143 +470,202 @@ export default function MobileUtilsDemo() {
                   time: new Date().toLocaleString(),
                 });
                 const data = sessionStorage.get("session-data");
-                Toast.show(`会话存储: ${JSON.stringify(data)}`);
+                notifications.show({
+                  message: `会话存储: ${JSON.stringify(data)}`,
+                  color: "blue",
+                });
               }}
-              block
+              fullWidth
             >
               测试会话存储（关闭标签页后失效）
             </Button>
           </Card>
 
-          <Card title="加密存储" className="mb-4">
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              加密存储
+            </Title>
             <Button
               onClick={() => {
                 secureStorage.set("secret", "这是加密的数据");
                 const encrypted = window.localStorage.getItem("secure_secret");
-                Toast.show(`加密后: ${encrypted?.substring(0, 20)}...`);
+                notifications.show({
+                  message: `加密后: ${encrypted?.substring(0, 20)}...`,
+                  color: "violet",
+                });
               }}
-              block
+              fullWidth
             >
               测试加密存储
             </Button>
           </Card>
 
-          <Card title="Cookie 操作" className="mt-4">
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Title order={5} mb="md">
+              Cookie 操作
+            </Title>
             <Button
               onClick={() => {
                 cookie.set("demo", "cookie-value", {
                   expires: 7 * 24 * 60 * 60 * 1000,
                 });
-                Toast.show("Cookie 已设置（7天后过期）");
+                notifications.show({
+                  message: "Cookie 已设置（7天后过期）",
+                  color: "teal",
+                });
               }}
-              block
+              fullWidth
             >
               设置 Cookie
             </Button>
           </Card>
-        </Tabs.Tab>
+        </Tabs.Panel>
 
-        <Tabs.Tab title="格式化" key="format">
-          <Card title="手机号格式化" className="mb-4">
-            <Input value={phone} onChange={setPhone} placeholder="输入手机号" />
-            <div className="mt-2 space-y-1">
-              <p>隐藏: {formatPhone(phone)}</p>
-              <p>显示: {formatPhone(phone, false)}</p>
-            </div>
+        <Tabs.Panel value="format" pt="md">
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              手机号格式化
+            </Title>
+            <TextInput
+              value={phone}
+              onChange={(e) => setPhone(e.currentTarget.value)}
+              placeholder="输入手机号"
+              mb="sm"
+            />
+            <Stack gap="xs">
+              <Text>隐藏: {formatPhone(phone)}</Text>
+              <Text>显示: {formatPhone(phone, false)}</Text>
+            </Stack>
           </Card>
 
-          <Card title="金额格式化" className="mb-4">
-            <Input
+          <Divider label="金额格式化" labelPosition="center" my="md" />
+
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              金额格式化
+            </Title>
+            <TextInput
               value={money}
-              onChange={setMoney}
+              onChange={(e) => setMoney(e.currentTarget.value)}
               placeholder="输入金额"
               type="number"
+              mb="sm"
             />
-            <div className="mt-2 space-y-1">
-              <p>人民币: {formatMoney(money)}</p>
-              <p>美元: {formatMoney(money, { prefix: "$" })}</p>
-              <p>无小数: {formatMoney(money, { decimals: 0 })}</p>
-            </div>
+            <Stack gap="xs">
+              <Text>人民币: {formatMoney(money)}</Text>
+              <Text>美元: {formatMoney(money, { prefix: "$" })}</Text>
+              <Text>无小数: {formatMoney(money, { decimals: 0 })}</Text>
+            </Stack>
           </Card>
 
-          <Card title="银行卡格式化" className="mb-4">
-            <Input
+          <Divider label="银行卡格式化" labelPosition="center" my="md" />
+
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              银行卡格式化
+            </Title>
+            <TextInput
               value={bankCard}
-              onChange={setBankCard}
+              onChange={(e) => setBankCard(e.currentTarget.value)}
               placeholder="输入银行卡号"
+              mb="sm"
             />
-            <div className="mt-2 space-y-1">
-              <p>隐藏: {formatBankCard(bankCard)}</p>
-              <p>显示: {formatBankCard(bankCard, false)}</p>
-            </div>
+            <Stack gap="xs">
+              <Text>隐藏: {formatBankCard(bankCard)}</Text>
+              <Text>显示: {formatBankCard(bankCard, false)}</Text>
+            </Stack>
           </Card>
 
-          <Card title="倒计时格式化" className="mb-4">
-            <div className="space-y-2">
-              <Button
-                onClick={() => {
-                  const endTime = new Date(
-                    Date.now() + 3 * 24 * 60 * 60 * 1000,
-                  ); // 3天后
-                  const countdown = formatCountdown(endTime);
-                  Dialog.alert({
-                    title: "倒计时格式化",
-                    content: `
-                      结束时间: ${endTime.toLocaleString()}
-                      剩余: ${countdown.days}天 ${countdown.hours}时 ${countdown.minutes}分 ${countdown.seconds}秒
-                      总毫秒数: ${countdown.total}
-                    `,
-                  });
-                }}
-                block
-              >
-                格式化倒计时（3天后）
-              </Button>
-            </div>
+          <Divider label="时间与倒计时" labelPosition="center" my="md" />
+
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              倒计时格式化
+            </Title>
+            <Button
+              onClick={() => {
+                const endTime = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000); // 3天后
+                const countdown = formatCountdown(endTime);
+                showModal(`
+结束时间: ${endTime.toLocaleString()}
+剩余: ${countdown.days}天 ${countdown.hours}时 ${countdown.minutes}分 ${countdown.seconds}秒
+总毫秒数: ${countdown.total}
+                `);
+              }}
+              fullWidth
+            >
+              格式化倒计时（3天后）
+            </Button>
           </Card>
 
-          <Divider>其他格式化功能</Divider>
+          <Divider label="其他格式化功能" labelPosition="center" my="md" />
 
-          <Card title="其他格式化">
-            <List>
-              <List.Item
-                extra={formatRelativeTime(new Date(Date.now() - 60000))}
-              >
-                相对时间
-              </List.Item>
-              <List.Item extra={formatFileSize(1024 * 1024 * 5.5)}>
-                文件大小
-              </List.Item>
-              <List.Item extra={formatIdCard("110101199001011234")}>
-                身份证
-              </List.Item>
-              <List.Item extra={formatName("张三丰")}>姓名</List.Item>
-            </List>
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Title order={5} mb="md">
+              其他格式化
+            </Title>
+            <Table>
+              <Table.Tbody>
+                <Table.Tr>
+                  <Table.Td>相对时间</Table.Td>
+                  <Table.Td>
+                    {formatRelativeTime(new Date(Date.now() - 60000))}
+                  </Table.Td>
+                </Table.Tr>
+                <Table.Tr>
+                  <Table.Td>文件大小</Table.Td>
+                  <Table.Td>{formatFileSize(1024 * 1024 * 5.5)}</Table.Td>
+                </Table.Tr>
+                <Table.Tr>
+                  <Table.Td>身份证</Table.Td>
+                  <Table.Td>{formatIdCard("110101199001011234")}</Table.Td>
+                </Table.Tr>
+                <Table.Tr>
+                  <Table.Td>姓名</Table.Td>
+                  <Table.Td>{formatName("张三丰")}</Table.Td>
+                </Table.Tr>
+              </Table.Tbody>
+            </Table>
           </Card>
-        </Tabs.Tab>
+        </Tabs.Panel>
 
-        <Tabs.Tab title="DOM操作" key="dom">
-          <Card title="复制到剪贴板" className="mb-4">
+        <Tabs.Panel value="dom" pt="md">
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              复制到剪贴板
+            </Title>
             <Button
               onClick={async () => {
                 const success = await copyToClipboard("Hello Mobile Utils!");
-                Toast.show(success ? "复制成功" : "复制失败");
+                notifications.show({
+                  message: success ? "复制成功" : "复制失败",
+                  color: success ? "green" : "red",
+                });
               }}
-              block
+              fullWidth
             >
               复制文本
             </Button>
           </Card>
 
-          <Card title="滚动控制" className="mb-4">
-            <Space>
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              滚动控制
+            </Title>
+            <Group>
               <Button
                 onClick={() => {
                   disableScroll();
-                  Toast.show("已禁用滚动");
+                  notifications.show({
+                    message: "已禁用滚动",
+                    color: "orange",
+                  });
                   setTimeout(() => {
                     enableScroll();
-                    Toast.show("已恢复滚动");
+                    notifications.show({
+                      message: "已恢复滚动",
+                      color: "green",
+                    });
                   }, 3000);
                 }}
               >
@@ -550,96 +678,136 @@ export default function MobileUtilsDemo() {
               >
                 回到顶部
               </Button>
-            </Space>
+            </Group>
           </Card>
 
-          <Card title="全屏操作">
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Title order={5} mb="md">
+              全屏操作
+            </Title>
             <Button
               onClick={() => {
                 fullscreen.toggle();
               }}
-              block
+              fullWidth
             >
               切换全屏
             </Button>
           </Card>
-        </Tabs.Tab>
+        </Tabs.Panel>
 
-        <Tabs.Tab title="Hooks" key="hooks">
-          <Card title="窗口信息" className="mb-4">
-            <List>
-              <List.Item extra={`${windowSize.width} x ${windowSize.height}`}>
-                窗口尺寸
-              </List.Item>
-              <List.Item
-                extra={`X: ${scrollPosition.x}, Y: ${scrollPosition.y}`}
-              >
-                滚动位置
-              </List.Item>
-            </List>
+        <Tabs.Panel value="hooks" pt="md">
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              窗口信息
+            </Title>
+            <Table>
+              <Table.Tbody>
+                <Table.Tr>
+                  <Table.Td>窗口尺寸</Table.Td>
+                  <Table.Td>
+                    {windowSize.width} x {windowSize.height}
+                  </Table.Td>
+                </Table.Tr>
+                <Table.Tr>
+                  <Table.Td>滚动位置</Table.Td>
+                  <Table.Td>
+                    X: {scrollPosition.x}, Y: {scrollPosition.y}
+                  </Table.Td>
+                </Table.Tr>
+              </Table.Tbody>
+            </Table>
           </Card>
 
-          <Divider>存储与状态管理</Divider>
+          <Divider label="存储与状态管理" labelPosition="center" my="md" />
 
-          <Card title="本地存储 Hook" className="mb-4">
-            <div className="space-y-2">
-              <p>当前值: {localValue}</p>
-              <Input
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              本地存储 Hook
+            </Title>
+            <Stack gap="sm">
+              <Text>当前值: {localValue}</Text>
+              <TextInput
                 value={localValue}
-                onChange={(val) => setLocalValue(val)}
+                onChange={(e) => setLocalValue(e.currentTarget.value)}
                 placeholder="修改值"
               />
-              <Button onClick={() => removeLocalValue()} size="small">
+              <Button onClick={() => removeLocalValue()} size="sm" color="red">
                 清除
               </Button>
-            </div>
+            </Stack>
           </Card>
 
-          <Divider>性能优化 Hooks</Divider>
+          <Divider label="性能优化 Hooks" labelPosition="center" my="md" />
 
-          <Card title="防抖测试" className="mb-4">
-            <Input
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              防抖测试
+            </Title>
+            <TextInput
               value={searchValue}
-              onChange={setSearchValue}
+              onChange={(e) => setSearchValue(e.currentTarget.value)}
               placeholder="输入搜索内容"
+              mb="sm"
             />
-            <p className="mt-2 text-sm text-gray-500">
+            <Text size="sm" c="dimmed">
               防抖后的值: {debouncedValue}
-            </p>
+            </Text>
           </Card>
 
-          <Card title="节流测试" className="mb-4">
-            <Input
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              节流测试
+            </Title>
+            <TextInput
               value={throttleValue}
-              onChange={setThrottleValue}
+              onChange={(e) => setThrottleValue(e.currentTarget.value)}
               placeholder="快速输入测试节流"
+              mb="sm"
             />
-            <p className="mt-2 text-sm text-gray-500">
+            <Text size="sm" c="dimmed">
               节流后的值（1秒更新一次）: {throttledValue}
-            </p>
+            </Text>
           </Card>
 
-          <Divider>时间与检测</Divider>
+          <Divider label="时间与检测" labelPosition="center" my="md" />
 
-          <Card title="倒计时">
-            <div className="text-center text-lg">
+          <Card shadow="sm" padding="lg" radius="md" withBorder mb="md">
+            <Title order={5} mb="md">
+              倒计时
+            </Title>
+            <Text ta="center" size="lg" fw={500}>
               {countdown.days}天 {countdown.hours}时 {countdown.minutes}分{" "}
               {countdown.seconds}秒
-            </div>
+            </Text>
           </Card>
 
-          <Card title="视口检测" className="mt-4">
-            <div
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Title order={5} mb="md">
+              视口检测
+            </Title>
+            <Box
               ref={inViewRef}
               className={`h-32 rounded-lg flex-center ${
                 inViewport ? "bg-green-100" : "bg-gray-100"
               }`}
             >
-              <p>{inViewport ? "在视口内" : "不在视口内"}</p>
-            </div>
+              <Text>{inViewport ? "在视口内" : "不在视口内"}</Text>
+            </Box>
           </Card>
-        </Tabs.Tab>
+        </Tabs.Panel>
       </Tabs>
-    </div>
+
+      <Modal
+        opened={modalOpened}
+        onClose={() => setModalOpened(false)}
+        title="详细信息"
+        size="lg"
+      >
+        <ScrollArea h={400}>
+          <Code block>{modalContent}</Code>
+        </ScrollArea>
+      </Modal>
+    </Box>
   );
 }
