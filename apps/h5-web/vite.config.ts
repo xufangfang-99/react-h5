@@ -6,7 +6,7 @@ import {
   alias,
   wrapperEnv,
   pathResolve,
-  __APP_INFO__
+  __APP_INFO__,
 } from "./build/utils";
 
 export default ({ mode }: ConfigEnv): UserConfigExport => {
@@ -16,7 +16,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
     base: VITE_PUBLIC_PATH,
     root,
     resolve: {
-      alias
+      alias,
     },
     // 服务端渲染
     server: {
@@ -27,14 +27,14 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
       proxy: {},
       // 预热文件以提前转换和缓存结果，降低启动期间的初始页面加载时长并防止转换瀑布
       warmup: {
-        clientFiles: ["./index.html", "./src/{pages,components}/*"]
-      }
+        clientFiles: ["./index.html", "./src/{pages,components}/*"],
+      },
     },
     plugins: getPluginsList(VITE_CDN, VITE_COMPRESSION),
     // https://cn.vitejs.dev/config/dep-optimization-options.html#dep-optimization-options
     optimizeDeps: {
       include,
-      exclude
+      exclude,
     },
     build: {
       // https://cn.vitejs.dev/guide/build.html#browser-compatibility
@@ -44,18 +44,18 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
       chunkSizeWarningLimit: 4000,
       rollupOptions: {
         input: {
-          index: pathResolve("./index.html", import.meta.url)
+          index: pathResolve("./index.html", import.meta.url),
         },
         // 静态资源分类打包
         output: {
           chunkFileNames: "static/js/[name]-[hash].js",
           entryFileNames: "static/js/[name]-[hash].js",
-          assetFileNames: "static/[ext]/[name]-[hash].[ext]"
-        }
-      }
+          assetFileNames: "static/[ext]/[name]-[hash].[ext]",
+        },
+      },
     },
     define: {
-      __APP_INFO__: JSON.stringify(__APP_INFO__)
-    }
+      __APP_INFO__: JSON.stringify(__APP_INFO__),
+    },
   };
 };

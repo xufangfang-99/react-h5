@@ -6,48 +6,34 @@ import pluginReactRefresh from "eslint-plugin-react-refresh";
 import configPrettier from "eslint-config-prettier";
 import pluginPrettier from "eslint-plugin-prettier";
 import pluginMarkdown from "eslint-plugin-markdown";
-import { defineConfig, globalIgnores } from "eslint/config";
+import { defineConfig } from "eslint/config";
 import globals from "globals";
 
 export default defineConfig([
-  globalIgnores([
-    "**/.*",
-    "dist/*",
-    "*.d.ts",
-    "public/*",
-    "src/assets/**",
-    "src/**/iconfont/**",
-  ]),
+  // 全局忽略
+  {
+    ignores: [
+      "**/dist/*",
+      "**/node_modules/*",
+      "**/.vite/*",
+      "**/coverage/*",
+      "**/public/*",
+      "**/*.d.ts",
+      "**/vite.config.ts.timestamp-*",
+      "pnpm-lock.yaml",
+    ],
+  },
+  // JavaScript 基础配置
   {
     ...js.configs.recommended,
+    files: ["**/*.{js,jsx,ts,tsx,mjs,cjs}"],
     languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
       globals: {
         ...globals.browser,
-        // React 全局变量
-        React: "readonly",
-        JSX: "readonly",
-        // 工具类型
-        RefType: "readonly",
-        EmitType: "readonly",
-        ComponentRef: "readonly",
-        AnyFunction: "readonly",
-        Writable: "readonly",
-        Nullable: "readonly",
-        NonNullable: "readonly",
-        Recordable: "readonly",
-        ReadonlyRecordable: "readonly",
-        Indexable: "readonly",
-        DeepPartial: "readonly",
-        Without: "readonly",
-        Exclusive: "readonly",
-        TimeoutHandle: "readonly",
-        IntervalHandle: "readonly",
-        Effect: "readonly",
-        ChangeEvent: "readonly",
-        WheelEvent: "readonly",
-        ImportMetaEnv: "readonly",
-        Fn: "readonly",
-        PromiseFn: "readonly",
+        ...globals.node,
+        ...globals.es2022,
       },
     },
     plugins: {
@@ -56,7 +42,7 @@ export default defineConfig([
     rules: {
       ...configPrettier.rules,
       ...pluginPrettier.configs.recommended.rules,
-      "no-debugger": "off",
+      "no-debugger": process.env.NODE_ENV === "production" ? "error" : "warn",
       "no-unused-vars": [
         "error",
         {
@@ -72,9 +58,10 @@ export default defineConfig([
       ],
     },
   },
+  // TypeScript 配置
   ...tseslint.config({
     extends: [...tseslint.configs.recommended],
-    files: ["**/*.?([cm])ts", "**/*.?([cm])tsx"],
+    files: ["**/*.{ts,tsx,mts,cts}"],
     rules: {
       "@typescript-eslint/no-redeclare": "error",
       "@typescript-eslint/ban-ts-comment": "off",
@@ -103,25 +90,10 @@ export default defineConfig([
       ],
     },
   }),
+  // React 配置（只对 apps 目录生效）
   {
-    files: ["**/*.d.ts"],
-    rules: {
-      "eslint-comments/no-unlimited-disable": "off",
-      "import/no-duplicates": "off",
-      "no-restricted-syntax": "off",
-      "unused-imports/no-unused-vars": "off",
-    },
-  },
-  {
-    files: ["**/*.?([cm])js"],
-    rules: {
-      "@typescript-eslint/no-require-imports": "off",
-    },
-  },
-  {
-    files: ["**/*.{ts,tsx,js,jsx}"],
+    files: ["apps/**/*.{jsx,tsx}"],
     plugins: {
-      "@typescript-eslint": tseslint.plugin,
       react: pluginReact,
       "react-hooks": pluginReactHooks,
       "react-refresh": pluginReactRefresh,
@@ -129,11 +101,13 @@ export default defineConfig([
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
         ecmaFeatures: {
           jsx: true,
         },
+      },
+      globals: {
+        React: "readonly",
+        JSX: "readonly",
       },
     },
     settings: {
@@ -156,6 +130,15 @@ export default defineConfig([
       "react/display-name": "off",
     },
   },
+  // Node.js 配置（构建脚本、配置文件等）
+  {
+    files: ["**/*.config.{js,ts,mjs,cjs}", "**/scripts/**/*", "build/**/*"],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
   // Markdown 文件配置
   {
     files: ["**/*.md"],
@@ -166,7 +149,7 @@ export default defineConfig([
   },
   // Markdown 中的代码块配置
   {
-    files: ["**/*.md/*.js", "**/*.md/*.jsx", "**/*.md/*.ts", "**/*.md/*.tsx"],
+    files: ["**/*.md/*.{js,jsx,ts,tsx}"],
     languageOptions: {
       parserOptions: {
         ecmaFeatures: {
@@ -175,22 +158,24 @@ export default defineConfig([
       },
     },
     rules: {
-      // 在 Markdown 代码块中放宽一些规则
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": "off",
       "no-undef": "off",
       "no-unused-expressions": "off",
       "@typescript-eslint/no-unused-expressions": "off",
       "padded-blocks": "off",
-      "import/no-unresolved": "off",
-      "node/no-missing-import": "off",
-      "node/no-missing-require": "off",
-      "node/no-unpublished-import": "off",
-      "node/no-unpublished-require": "off",
       "react/react-in-jsx-scope": "off",
       "react/jsx-no-undef": "off",
       "react-refresh/only-export-components": "off",
       "prettier/prettier": "off",
+    },
+  },
+  // packages 目录特殊配置
+  {
+    files: ["packages/**/*.{ts,tsx,js,jsx}"],
+    rules: {
+      // packages 中可能不需要 React 相关的规则
+      "react-refresh/only-export-components": "off",
     },
   },
 ]);

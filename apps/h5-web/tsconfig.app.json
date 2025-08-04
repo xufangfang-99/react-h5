@@ -38,16 +38,7 @@
     },
 
     /* Type definitions */
-    "types": [
-      "node",
-      "vite/client",
-      "unplugin-icons/types/react"
-    ]
+    "types": ["node", "vite/client", "unplugin-icons/types/react"]
   },
-  "include": [
-    "src",
-    "mock/*.ts",
-    "types/*.d.ts",
-    "vite.config.ts"
-  ]
+  "include": ["src", "mock/*.ts", "types/*.d.ts", "vite.config.ts"]
 }

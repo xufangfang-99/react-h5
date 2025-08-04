@@ -72,6 +72,9 @@
     "**/*.tsx",
     "**/*.json",
     "**/*.md",
-    "**/*.yaml"
+    "**/*.yaml",
+    "**/dist/**",
+    "**/node_modules/**",
+    "**/public/**"
   ]
 }

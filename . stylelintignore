@@ -1,0 +1,10 @@
+dist
+node_modules
+public
+.husky
+.vscode
+**/dist
+**/node_modules
+**/public
+**/.vite
+**/src/assets/iconfont

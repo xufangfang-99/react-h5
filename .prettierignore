@@ -2,10 +2,15 @@ dist
 .local
 .output.js
 node_modules
+**/node_modules
+**/.vite
+**/dist
 
 **/*.svg
 **/*.sh
 
 public
+**/public
 .npmrc
 pnpm-lock.yaml
+pnpm-workspace.yaml
