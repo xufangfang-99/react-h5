@@ -39,11 +39,5 @@ export const cdn = importToCDN({
       var: "_",
       path: "lodash.min.js",
     },
-    {
-      name: "antd",
-      var: "antd",
-      path: "antd.min.js",
-      css: "antd.min.css",
-    },
   ],
 });
