@@ -51,6 +51,12 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
           drop_debugger: true,
           pure_funcs: ["console.log", "console.info", "console.debug"],
         },
+        format: {
+          comments: false, // 删除注释
+        },
+        mangle: {
+          safari10: true, // 兼容 Safari 10
+        },
       },
       rollupOptions: {
         input: {
