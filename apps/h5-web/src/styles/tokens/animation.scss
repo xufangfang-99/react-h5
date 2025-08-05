@@ -1,0 +1,28 @@
+// 动画 Token 系统 - 简化版
+
+// 动画时长
+$duration-150: 150ms;
+$duration-200: 200ms;
+$duration-300: 300ms;
+$duration-500: 500ms;
+$duration-700: 700ms;
+
+// 缓动函数
+$ease-in: cubic-bezier(0.4, 0, 1, 1);
+$ease-out: cubic-bezier(0, 0, 0.2, 1);
+$ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+// 生成 CSS 变量
+:root {
+  // 时长
+  --duration-150: #{$duration-150};
+  --duration-200: #{$duration-200};
+  --duration-300: #{$duration-300};
+  --duration-500: #{$duration-500};
+  --duration-700: #{$duration-700};
+
+  // 缓动
+  --ease-in: #{$ease-in};
+  --ease-out: #{$ease-out};
+  --ease-in-out: #{$ease-in-out};
+}

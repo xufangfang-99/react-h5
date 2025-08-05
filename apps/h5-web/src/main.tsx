@@ -1,15 +1,17 @@
+// src/main.tsx
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import App from "./App.tsx";
+import { ThemeProvider } from "./components/ThemeProvider";
 
 // 引入样式 - 按优先级排序
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import "virtual:uno.css";
-import "@/styles/index.css";
-import "@/styles/mobile.css";
+import "@/styles/index.scss"; // 改为 scss
+import "@/styles/mobile.scss"; // 改为 scss
 
 // 异步导入性能监控，避免阻塞首次渲染
 if (import.meta.env.DEV) {
@@ -35,22 +37,28 @@ root.render(
 requestAnimationFrame(() => {
   root.render(
     <React.StrictMode>
-      <MantineProvider
-        theme={{
-          primaryColor: "blue",
-          defaultRadius: "md",
-          components: {
-            Button: {
-              defaultProps: {
-                size: "md",
+      <ThemeProvider defaultTheme="default">
+        <MantineProvider
+          theme={{
+            primaryColor: "blue",
+            defaultRadius: "md",
+            components: {
+              Button: {
+                defaultProps: {
+                  size: "md",
+                },
               },
             },
-          },
-        }}
-      >
-        <Notifications position="top-center" />
-        <App />
-      </MantineProvider>
+            // 响应主题变化
+            other: {
+              themeChangeListener: true,
+            },
+          }}
+        >
+          <Notifications position="top-center" />
+          <App />
+        </MantineProvider>
+      </ThemeProvider>
     </React.StrictMode>,
   );
 });

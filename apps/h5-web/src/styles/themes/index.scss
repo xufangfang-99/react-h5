@@ -1,0 +1,80 @@
+// 主题系统入口文件
+@use "../tokens" as *;
+
+// 默认主题（蓝色）
+[data-theme="default"] {
+  --color-primary-50: #{$color-primary-50};
+  --color-primary-100: #{$color-primary-100};
+  --color-primary-200: #{$color-primary-200};
+  --color-primary-300: #{$color-primary-300};
+  --color-primary-400: #{$color-primary-400};
+  --color-primary-500: #{$color-primary-500};
+  --color-primary-600: #{$color-primary-600};
+  --color-primary-700: #{$color-primary-700};
+  --color-primary-800: #{$color-primary-800};
+  --color-primary-900: #{$color-primary-900};
+}
+
+// 翡翠绿主题
+[data-theme="emerald"] {
+  --color-primary-50: #ecfdf5;
+  --color-primary-100: #d1fae5;
+  --color-primary-200: #a7f3d0;
+  --color-primary-300: #6ee7b7;
+  --color-primary-400: #34d399;
+  --color-primary-500: #22c55e;
+  --color-primary-600: #16a34a;
+  --color-primary-700: #15803d;
+  --color-primary-800: #166534;
+  --color-primary-900: #14532d;
+}
+
+// 优雅紫主题
+[data-theme="violet"] {
+  --color-primary-50: #f5f3ff;
+  --color-primary-100: #ede9fe;
+  --color-primary-200: #ddd6fe;
+  --color-primary-300: #c4b5fd;
+  --color-primary-400: #a78bfa;
+  --color-primary-500: #8b5cf6;
+  --color-primary-600: #7c3aed;
+  --color-primary-700: #6d28d9;
+  --color-primary-800: #5b21b6;
+  --color-primary-900: #4c1d95;
+}
+
+// 活力橙主题
+[data-theme="orange"] {
+  --color-primary-50: #fff7ed;
+  --color-primary-100: #ffedd5;
+  --color-primary-200: #fed7aa;
+  --color-primary-300: #fdba74;
+  --color-primary-400: #fb923c;
+  --color-primary-500: #f97316;
+  --color-primary-600: #ea580c;
+  --color-primary-700: #c2410c;
+  --color-primary-800: #9a3412;
+  --color-primary-900: #7c2d12;
+}
+
+// 玫瑰粉主题
+[data-theme="rose"] {
+  --color-primary-50: #fff1f2;
+  --color-primary-100: #ffe4e6;
+  --color-primary-200: #fecdd3;
+  --color-primary-300: #fda4af;
+  --color-primary-400: #fb7185;
+  --color-primary-500: #f43f5e;
+  --color-primary-600: #e11d48;
+  --color-primary-700: #be123c;
+  --color-primary-800: #9f1239;
+  --color-primary-900: #881337;
+}
+
+// 主题过渡效果
+.theme-transitioning * {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease !important;
+}

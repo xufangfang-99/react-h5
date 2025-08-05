@@ -1,0 +1,87 @@
+// 主样式文件入口
+
+// 1. Token 系统
+@use "tokens";
+
+// 2. 主题系统
+@use "themes";
+
+// 3. 基础样式
+@use "base/reset";
+
+// 4. 组件样式
+@use "components";
+
+// 5. 工具类
+@use "utilities";
+
+// 全局样式
+:root {
+  scroll-behavior: smooth;
+}
+
+// 选择文本
+::selection {
+  color: white;
+  background-color: var(--color-primary-500);
+}
+
+// 滚动条
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-gray-400);
+  border-radius: var(--radius-full);
+
+  &:hover {
+    background-color: var(--color-gray-500);
+  }
+}
+
+// 焦点样式
+:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+// 禁用状态
+[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+// 基础动画
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

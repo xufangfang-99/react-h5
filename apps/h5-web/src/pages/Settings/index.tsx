@@ -15,14 +15,17 @@ import {
   IconBell,
   IconShield,
   IconLanguage,
+  IconPalette,
 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { notifications } from "@mantine/notifications";
 import { clearRequestCache } from "@/utils/request";
 import { localStorage } from "@packages/mobile-utils";
+import { useTheme } from "@/components/ThemeProvider";
 
 const Settings = () => {
   const navigate = useNavigate();
+  const { theme, setTheme, themes } = useTheme();
 
   const handleClearCache = () => {
     clearRequestCache();
@@ -35,14 +38,32 @@ const Settings = () => {
 
   const settingGroups = [
     {
-      title: "通用设置",
+      title: "个性化",
       items: [
+        {
+          icon: IconPalette,
+          label: "主题",
+          description: "选择您喜欢的颜色主题",
+          action: "theme-selector",
+        },
         {
           icon: IconMoon,
           label: "深色模式",
           description: "开启后使用深色主题",
-          action: <Switch defaultChecked={false} />,
+          action: (
+            <Switch
+              checked={theme === "dark"}
+              onChange={(e) =>
+                setTheme(e.currentTarget.checked ? "dark" : "default")
+              }
+            />
+          ),
         },
+      ],
+    },
+    {
+      title: "通用设置",
+      items: [
         {
           icon: IconBell,
           label: "消息通知",
@@ -95,6 +116,68 @@ const Settings = () => {
               <Stack gap={0}>
                 {group.items.map((item, index) => {
                   const Icon = item.icon;
+
+                  // 主题选择器特殊处理
+                  if (item.action === "theme-selector") {
+                    return (
+                      <Box
+                        key={item.label}
+                        p="md"
+                        className={
+                          index !== group.items.length - 1
+                            ? "border-b border-gray-100"
+                            : ""
+                        }
+                      >
+                        <Group gap="md" mb="md">
+                          <Icon size={20} className="text-gray-600" />
+                          <div className="flex-1">
+                            <Text size="sm" fw={500}>
+                              {item.label}
+                            </Text>
+                            <Text size="xs" c="dimmed">
+                              {item.description}
+                            </Text>
+                          </div>
+                        </Group>
+
+                        {/* 主题选择器 */}
+                        <div className="grid grid-cols-3 gap-3">
+                          {Object.entries(themes).map(([key, config]) => {
+                            if (key === "dark") return null; // 深色模式单独控制
+                            return (
+                              <button
+                                key={key}
+                                onClick={() => setTheme(key as any)}
+                                className={`
+                                  relative p-3 rounded-lg border-2 transition-all
+                                  ${
+                                    theme === key
+                                      ? "border-primary-500 bg-primary-50"
+                                      : "border-gray-200 hover:border-gray-300"
+                                  }
+                                `}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <div
+                                    className="w-6 h-6 rounded-full"
+                                    style={{ backgroundColor: config.primary }}
+                                  />
+                                  <Text size="xs" fw={500}>
+                                    {config.name}
+                                  </Text>
+                                </div>
+                                {theme === key && (
+                                  <div className="absolute top-1 right-1 w-2 h-2 bg-primary-500 rounded-full" />
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </Box>
+                    );
+                  }
+
                   return (
                     <Box
                       key={item.label}
@@ -134,9 +217,9 @@ const Settings = () => {
                             size={16}
                             className="text-gray-400 rotate-180"
                           />
-                        ) : (
+                        ) : item.action !== "theme-selector" ? (
                           item.action
-                        )}
+                        ) : null}
                       </Group>
                     </Box>
                   );

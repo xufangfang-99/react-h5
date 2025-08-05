@@ -1,3 +1,4 @@
+// apps/h5-web/uno.config.ts
 import {
   defineConfig,
   presetUno,
@@ -11,14 +12,27 @@ export default defineConfig({
     presetAttributify(),
     presetIcons({
       scale: 1.2,
-      warn: true,
+      warn: false,
       extraProperties: {
         display: "inline-block",
         "vertical-align": "middle",
       },
     }),
   ],
-  safelist: ["animate-spin", "animate-pulse"],
+  safelist: [
+    "animate-spin",
+    "animate-pulse",
+    // 添加主题相关的安全类名
+    ...Array.from({ length: 10 }, (_, i) => {
+      const level = (i + 1) * 100 - 50;
+      return [
+        `bg-primary-${level}`,
+        `text-primary-${level}`,
+        `border-primary-${level}`,
+        `shadow-primary-${level}`,
+      ];
+    }).flat(),
+  ],
   blocklist: [
     "container",
     "return",
@@ -42,30 +56,93 @@ export default defineConfig({
   ],
   theme: {
     colors: {
+      // 使用 CSS 变量，支持主题切换
       primary: {
-        50: "#eff6ff",
-        100: "#dbeafe",
-        200: "#bfdbfe",
-        300: "#93c5fd",
-        400: "#60a5fa",
-        500: "#3b82f6",
-        600: "#2563eb",
-        700: "#1d4ed8",
-        800: "#1e40af",
-        900: "#1e3a8a",
+        50: "var(--color-primary-50)",
+        100: "var(--color-primary-100)",
+        200: "var(--color-primary-200)",
+        300: "var(--color-primary-300)",
+        400: "var(--color-primary-400)",
+        500: "var(--color-primary-500)",
+        600: "var(--color-primary-600)",
+        700: "var(--color-primary-700)",
+        800: "var(--color-primary-800)",
+        900: "var(--color-primary-900)",
       },
       gray: {
-        50: "#f9fafb",
-        100: "#f3f4f6",
-        200: "#e5e7eb",
-        300: "#d1d5db",
-        400: "#9ca3af",
-        500: "#6b7280",
-        600: "#4b5563",
-        700: "#374151",
-        800: "#1f2937",
-        900: "#111827",
+        50: "var(--color-gray-50)",
+        100: "var(--color-gray-100)",
+        200: "var(--color-gray-200)",
+        300: "var(--color-gray-300)",
+        400: "var(--color-gray-400)",
+        500: "var(--color-gray-500)",
+        600: "var(--color-gray-600)",
+        700: "var(--color-gray-700)",
+        800: "var(--color-gray-800)",
+        900: "var(--color-gray-900)",
       },
+      success: {
+        50: "var(--color-success-50)",
+        100: "var(--color-success-100)",
+        200: "var(--color-success-200)",
+        300: "var(--color-success-300)",
+        400: "var(--color-success-400)",
+        500: "var(--color-success-500)",
+        600: "var(--color-success-600)",
+        700: "var(--color-success-700)",
+        800: "var(--color-success-800)",
+        900: "var(--color-success-900)",
+      },
+      warning: {
+        50: "var(--color-warning-50)",
+        100: "var(--color-warning-100)",
+        200: "var(--color-warning-200)",
+        300: "var(--color-warning-300)",
+        400: "var(--color-warning-400)",
+        500: "var(--color-warning-500)",
+        600: "var(--color-warning-600)",
+        700: "var(--color-warning-700)",
+        800: "var(--color-warning-800)",
+        900: "var(--color-warning-900)",
+      },
+      error: {
+        50: "var(--color-error-50)",
+        100: "var(--color-error-100)",
+        200: "var(--color-error-200)",
+        300: "var(--color-error-300)",
+        400: "var(--color-error-400)",
+        500: "var(--color-error-500)",
+        600: "var(--color-error-600)",
+        700: "var(--color-error-700)",
+        800: "var(--color-error-800)",
+        900: "var(--color-error-900)",
+      },
+      info: {
+        50: "var(--color-info-50)",
+        100: "var(--color-info-100)",
+        200: "var(--color-info-200)",
+        300: "var(--color-info-300)",
+        400: "var(--color-info-400)",
+        500: "var(--color-info-500)",
+        600: "var(--color-info-600)",
+        700: "var(--color-info-700)",
+        800: "var(--color-info-800)",
+        900: "var(--color-info-900)",
+      },
+    },
+    // 添加阴影配置
+    boxShadow: {
+      xs: "var(--shadow-xs)",
+      sm: "var(--shadow-sm)",
+      md: "var(--shadow-md)",
+      lg: "var(--shadow-lg)",
+      xl: "var(--shadow-xl)",
+      "2xl": "var(--shadow-2xl)",
+      inner: "var(--shadow-inner)",
+      primary: "var(--shadow-primary)",
+      success: "var(--shadow-success)",
+      error: "var(--shadow-error)",
+      none: "none",
     },
     breakpoints: {
       xs: "320px",
@@ -77,17 +154,29 @@ export default defineConfig({
     },
   },
   shortcuts: [
-    // 常用组合
+    // 主题感知的按钮
     [
-      "btn",
-      "px-4 py-1 rounded inline-block bg-teal-600 text-white cursor-pointer hover:bg-teal-700 disabled:cursor-default disabled:bg-gray-600 disabled:opacity-50",
+      "btn-primary",
+      "bg-primary-500 hover:bg-primary-600 text-white shadow-sm hover:shadow-md transition-all",
     ],
-    ["btn-primary", "bg-primary-500 hover:bg-primary-600 text-white"],
-    ["btn-secondary", "bg-gray-500 hover:bg-gray-600 text-white"],
     [
-      "icon-btn",
-      "text-[0.9em] inline-block cursor-pointer select-none opacity-75 transition duration-200 ease-in-out hover:opacity-100 hover:text-teal-600",
+      "btn-secondary",
+      "bg-gray-500 hover:bg-gray-600 text-white shadow-sm hover:shadow-md transition-all",
     ],
+    [
+      "btn-ghost",
+      "bg-transparent hover:bg-gray-100 text-gray-700 hover:text-gray-900 transition-all",
+    ],
+    // 卡片样式
+    ["card", "bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"],
+    ["card-bordered", "bg-white rounded-lg border border-gray-200"],
+    // 语义化背景
+    ["bg-surface", "bg-[var(--color-background-primary)]"],
+    ["bg-surface-secondary", "bg-[var(--color-background-secondary)]"],
+    // 语义化文本
+    ["text-primary", "text-[var(--color-text-primary)]"],
+    ["text-secondary", "text-[var(--color-text-secondary)]"],
+    ["text-tertiary", "text-[var(--color-text-tertiary)]"],
     // 布局
     ["flex-center", "flex items-center justify-center"],
     ["flex-between", "flex items-center justify-between"],
@@ -104,6 +193,32 @@ export default defineConfig({
     ],
   ],
   rules: [
+    // 动态颜色规则
+    [
+      /^theme-color-(.+)$/,
+      ([, color]) => ({
+        color: `var(--color-primary-${color})`,
+      }),
+    ],
+    [
+      /^theme-bg-(.+)$/,
+      ([, color]) => ({
+        "background-color": `var(--color-primary-${color})`,
+      }),
+    ],
+    [
+      /^theme-border-(.+)$/,
+      ([, color]) => ({
+        "border-color": `var(--color-primary-${color})`,
+      }),
+    ],
+    // 动态阴影规则
+    [
+      /^theme-shadow-(.+)$/,
+      ([, shadow]) => ({
+        "box-shadow": `var(--shadow-${shadow})`,
+      }),
+    ],
     // 1px边框解决方案
     [
       "border-1px",
@@ -120,7 +235,7 @@ export default defineConfig({
         left: "0",
         width: "200%",
         height: "200%",
-        border: "1px solid #e5e7eb",
+        border: "1px solid var(--color-border-default)",
         "border-radius": "inherit",
         transform: "scale(0.5)",
         "transform-origin": "0 0",
