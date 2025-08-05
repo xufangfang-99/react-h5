@@ -35,24 +35,63 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
     optimizeDeps: {
       include,
       exclude,
+      // 强制预构建
+      force: true,
+      // 优化的入口点
+      entries: ["src/**/*.{jsx,tsx}"],
     },
     build: {
       // https://cn.vitejs.dev/guide/build.html#browser-compatibility
+      minify: "terser",
       target: "es2015",
       sourcemap: false,
-      // 消除打包大小超过500kb警告
-      chunkSizeWarningLimit: 4000,
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+          pure_funcs: ["console.log", "console.info", "console.debug"],
+        },
+      },
       rollupOptions: {
         input: {
           index: pathResolve("./index.html", import.meta.url),
         },
         // 静态资源分类打包
         output: {
-          chunkFileNames: "static/js/[name]-[hash].js",
+          // 手动分包策略
+          manualChunks: {
+            // React 相关
+            "react-vendor": ["react", "react-dom"],
+            "react-router": ["react-router-dom"],
+            // UI 库
+            "ui-core": ["@mantine/core"],
+            "ui-hooks": ["@mantine/hooks"],
+            "ui-notifications": ["@mantine/notifications"],
+            // 工具库
+            utils: ["axios", "dayjs"],
+            lodash: ["lodash-es"],
+            // 图标库单独打包
+            icons: ["@tabler/icons-react"],
+            // 分离大型组件
+            "mobile-utils": ["@packages/mobile-utils"],
+          },
+          // 静态资源分类打包
+          chunkFileNames: (chunkInfo) => {
+            const facadeModuleId = chunkInfo.facadeModuleId
+              ? chunkInfo.facadeModuleId.split("/").pop()
+              : "chunk";
+            return `static/js/${facadeModuleId}-[hash].js`;
+          },
           entryFileNames: "static/js/[name]-[hash].js",
           assetFileNames: "static/[ext]/[name]-[hash].[ext]",
         },
       },
+      // CSS 代码分割
+      cssCodeSplit: true,
+      // 更激进的代码分割策略
+      chunkSizeWarningLimit: 500,
+      // 启用 CSS 压缩
+      cssMinify: "lightningcss", // 使用更快的 CSS 压缩器
     },
     define: {
       __APP_INFO__: JSON.stringify(__APP_INFO__),

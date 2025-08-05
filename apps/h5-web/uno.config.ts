@@ -12,7 +12,33 @@ export default defineConfig({
     presetIcons({
       scale: 1.2,
       warn: true,
+      extraProperties: {
+        display: "inline-block",
+        "vertical-align": "middle",
+      },
     }),
+  ],
+  safelist: ["animate-spin", "animate-pulse"],
+  blocklist: [
+    "container",
+    "return",
+    "function",
+    "try",
+    "export",
+    "import",
+    "const",
+    "let",
+    "var",
+    "if",
+    "else",
+    "for",
+    "while",
+    "do",
+    "switch",
+    "case",
+    "default",
+    "break",
+    "continue",
   ],
   theme: {
     colors: {

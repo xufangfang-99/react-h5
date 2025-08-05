@@ -5,31 +5,46 @@
  * 温馨提示：如果您使用的第三方库是全局引入，也就是引入到 src/main.tsx 文件里，就不需要再添加到 include 里了，因为 vite 会自动将它们缓存到 node_modules/.vite
  */
 const include = [
-  "mitt",
-  "dayjs",
-  "axios",
-  "clsx",
+  // React 核心
   "react",
-  "ahooks",
-  "zustand",
   "react-dom",
-  "js-cookie",
   "react/jsx-runtime",
   "react/jsx-dev-runtime",
-  "@ant-design/icons",
   "react-router-dom",
-  "@pureadmin/utils",
-  "responsive-storage",
-  "@tanstack/react-query",
-  "framer-motion",
-  "react-hook-form",
-  "react-use",
-  "lodash-es",
-  "@packages/mobile-utils",
+
+  // UI 库 - Mantine 相关（只包含主包）
   "@mantine/core",
   "@mantine/hooks",
   "@mantine/notifications",
   "@tabler/icons-react",
+
+  // 状态管理
+  "zustand",
+  "@tanstack/react-query",
+
+  // 工具库
+  "mitt",
+  "dayjs",
+  "axios",
+  "clsx",
+  "js-cookie",
+  "lodash-es",
+  "@pureadmin/utils",
+  "responsive-storage",
+
+  // Hooks 库
+  "ahooks",
+  "react-use",
+  "react-hook-form",
+
+  // 动画
+  "framer-motion",
+
+  // 图标
+  "@ant-design/icons",
+
+  // 内部包
+  "@packages/mobile-utils",
 ];
 
 /**

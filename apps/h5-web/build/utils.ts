@@ -4,6 +4,29 @@ import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import { sum, formatBytes } from "@pureadmin/utils";
 
+// 定义类型
+interface ViteEnv {
+  VITE_PORT: number;
+  VITE_PUBLIC_PATH: string;
+  VITE_ROUTER_HISTORY: string;
+  VITE_CDN: boolean;
+  VITE_HIDE_HOME: string;
+  VITE_COMPRESSION: ViteCompression;
+}
+
+type ViteCompression =
+  | "none"
+  | "gzip"
+  | "brotli"
+  | "both"
+  | "gzip-clear"
+  | "brotli-clear"
+  | "both-clear";
+
+interface Recordable<T = any> {
+  [key: string]: T;
+}
+
 // 从 package.json 中导入项目信息
 let packageInfo: any = {};
 try {
@@ -50,6 +73,9 @@ const alias: Record<string, string> = {
   "@services": pathResolve("../src/services"),
   "@assets": pathResolve("../src/assets"),
   "@styles": pathResolve("../src/styles"),
+  "@store": pathResolve("../src/store"),
+  "@router": pathResolve("../src/router"),
+  "@layout": pathResolve("../src/layout"),
   "@packages/mobile-utils": pathResolve("../../../packages/mobile-utils/src"),
 };
 
@@ -125,29 +151,5 @@ const getPackageSize = (options: PackageSizeOptions) => {
   });
 };
 
-// 定义类型
-declare global {
-  interface ViteEnv {
-    VITE_PORT: number;
-    VITE_PUBLIC_PATH: string;
-    VITE_ROUTER_HISTORY: string;
-    VITE_CDN: boolean;
-    VITE_HIDE_HOME: string;
-    VITE_COMPRESSION: ViteCompression;
-  }
-
-  type ViteCompression =
-    | "none"
-    | "gzip"
-    | "brotli"
-    | "both"
-    | "gzip-clear"
-    | "brotli-clear"
-    | "both-clear";
-
-  interface Recordable<T = any> {
-    [key: string]: T;
-  }
-}
-
 export { root, pathResolve, alias, __APP_INFO__, wrapperEnv, getPackageSize };
+export type { ViteEnv, ViteCompression, Recordable };
