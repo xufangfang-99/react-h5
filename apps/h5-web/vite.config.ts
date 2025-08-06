@@ -64,21 +64,15 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
         },
         // 静态资源分类打包
         output: {
-          // 手动分包策略
+          // 手动分包策略 - 优化版
           manualChunks: {
-            // React 相关
-            "react-vendor": ["react", "react-dom"],
-            "react-router": ["react-router-dom"],
-            // UI 库
-            "ui-core": ["@mantine/core"],
-            "ui-hooks": ["@mantine/hooks"],
-            "ui-notifications": ["@mantine/notifications"],
+            // React 核心
+            "react-vendor": ["react", "react-dom", "react-router-dom"],
+            // 状态管理和数据请求
+            "state-vendor": ["zustand", "@tanstack/react-query"],
             // 工具库
-            utils: ["axios", "dayjs"],
-            lodash: ["lodash-es"],
-            // 图标库单独打包
-            icons: ["@tabler/icons-react"],
-            // 分离大型组件
+            "utils-vendor": ["axios", "dayjs", "lodash-es", "clsx"],
+            // 内部包
             "mobile-utils": ["@packages/mobile-utils"],
           },
           // 静态资源分类打包

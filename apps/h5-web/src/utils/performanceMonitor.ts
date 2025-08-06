@@ -1,209 +1,279 @@
-import { useEffect } from "react";
+/**
+ * 性能监控工具
+ */
 
-interface PerformanceMetrics {
-  FCP: number; // First Contentful Paint
-  LCP: number; // Largest Contentful Paint
-  FID: number; // First Input Delay
-  CLS: number; // Cumulative Layout Shift
-  TTFB: number; // Time to First Byte
-  TTI: number; // Time to Interactive
-}
-
-interface PerformanceEventTiming extends PerformanceEntry {
-  processingStart: number;
-  processingEnd: number;
-  duration: number;
-  cancelable: boolean;
-  target?: EventTarget;
-}
-
-interface LayoutShiftEntry extends PerformanceEntry {
-  value: number;
-  hadRecentInput: boolean;
-  sources: Array<{
-    node?: Node;
-    previousRect: DOMRectReadOnly;
-    currentRect: DOMRectReadOnly;
-  }>;
-}
-
-interface LargestContentfulPaintEntry extends PerformanceEntry {
-  renderTime: number;
-  loadTime: number;
-  size: number;
-  id: string;
-  url: string;
-  element?: Element;
+export interface PerformanceMetrics {
+  // 导航计时
+  navigationStart: number;
+  domContentLoaded: number;
+  loadComplete: number;
+  // 资源计时
+  resourceCount: number;
+  resourceDuration: number;
+  // 绘制计时
+  firstPaint?: number;
+  firstContentfulPaint?: number;
+  largestContentfulPaint?: number;
+  // 交互计时
+  firstInputDelay?: number;
+  cumulativeLayoutShift?: number;
+  // 内存使用
+  memoryUsed?: number;
+  memoryLimit?: number;
 }
 
 class PerformanceMonitor {
-  private metrics: Partial<PerformanceMetrics> = {};
-  private observers: Map<string, PerformanceObserver> = new Map();
+  private metrics: PerformanceMetrics = {
+    navigationStart: 0,
+    domContentLoaded: 0,
+    loadComplete: 0,
+    resourceCount: 0,
+    resourceDuration: 0,
+  };
 
   constructor() {
     this.init();
   }
 
   private init() {
-    // 监听页面加载性能
-    if (typeof window !== "undefined" && "performance" in window) {
-      // FCP 和 LCP
-      this.observePaintMetrics();
+    // 监听页面加载事件
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", () =>
+        this.onDOMContentLoaded(),
+      );
+    } else {
+      this.onDOMContentLoaded();
+    }
 
-      // FID
-      this.observeFirstInput();
+    window.addEventListener("load", () => this.onLoad());
 
-      // CLS
-      this.observeLayoutShift();
-
-      // Navigation Timing
-      this.observeNavigationTiming();
+    // 监听性能条目
+    if ("PerformanceObserver" in window) {
+      this.observePerformance();
     }
   }
 
-  private observePaintMetrics() {
-    try {
-      const observer = new PerformanceObserver((list) => {
-        for (const entry of list.getEntries()) {
-          if (entry.name === "first-contentful-paint") {
-            this.metrics.FCP = entry.startTime;
-          }
-          if (entry.entryType === "largest-contentful-paint") {
-            const lcpEntry = entry as LargestContentfulPaintEntry;
-            this.metrics.LCP = lcpEntry.startTime;
-          }
+  private onDOMContentLoaded() {
+    const perfData = performance.getEntriesByType(
+      "navigation",
+    )[0] as PerformanceNavigationTiming;
+    if (perfData) {
+      this.metrics.domContentLoaded =
+        perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart;
+    }
+  }
+
+  private onLoad() {
+    const perfData = performance.getEntriesByType(
+      "navigation",
+    )[0] as PerformanceNavigationTiming;
+    if (perfData) {
+      this.metrics.navigationStart = perfData.fetchStart;
+      this.metrics.loadComplete = perfData.loadEventEnd - perfData.fetchStart;
+    }
+
+    // 获取资源加载信息
+    const resources = performance.getEntriesByType(
+      "resource",
+    ) as PerformanceResourceTiming[];
+    this.metrics.resourceCount = resources.length;
+    this.metrics.resourceDuration = resources.reduce((total, resource) => {
+      return total + (resource.responseEnd - resource.startTime);
+    }, 0);
+
+    // 获取内存信息（如果可用）
+    if ("memory" in performance) {
+      const memory = (performance as any).memory;
+      this.metrics.memoryUsed = memory.usedJSHeapSize / 1048576; // 转换为 MB
+      this.metrics.memoryLimit = memory.jsHeapSizeLimit / 1048576;
+    }
+  }
+
+  private observePerformance() {
+    // FCP (First Contentful Paint)
+    const paintObserver = new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        if (entry.name === "first-paint") {
+          this.metrics.firstPaint = entry.startTime;
+        } else if (entry.name === "first-contentful-paint") {
+          this.metrics.firstContentfulPaint = entry.startTime;
         }
-      });
-
-      observer.observe({ entryTypes: ["paint", "largest-contentful-paint"] });
-      this.observers.set("paint", observer);
-    } catch (e) {
-      console.warn("Paint metrics observation not supported:", e);
-    }
-  }
-
-  private observeFirstInput() {
-    try {
-      const observer = new PerformanceObserver((list) => {
-        const firstInput = list.getEntries()[0] as PerformanceEventTiming;
-        if (firstInput && firstInput.processingStart) {
-          this.metrics.FID = firstInput.processingStart - firstInput.startTime;
-        }
-      });
-
-      observer.observe({ entryTypes: ["first-input"] });
-      this.observers.set("first-input", observer);
-    } catch (e) {
-      console.warn("First input observation not supported:", e);
-    }
-  }
-
-  private observeLayoutShift() {
-    try {
-      let clsValue = 0;
-      const clsEntries: PerformanceEntry[] = [];
-
-      const observer = new PerformanceObserver((list) => {
-        for (const entry of list.getEntries()) {
-          const layoutShiftEntry = entry as LayoutShiftEntry;
-          // 只计算没有用户输入的布局偏移
-          if (!layoutShiftEntry.hadRecentInput) {
-            clsValue += layoutShiftEntry.value;
-            clsEntries.push(entry);
-          }
-        }
-        this.metrics.CLS = clsValue;
-      });
-
-      observer.observe({ entryTypes: ["layout-shift"] });
-      this.observers.set("layout-shift", observer);
-    } catch (e) {
-      console.warn("Layout shift observation not supported:", e);
-    }
-  }
-
-  private observeNavigationTiming() {
-    if (window.performance && window.performance.timing) {
-      const timing = window.performance.timing;
-
-      // TTFB
-      if (timing.responseStart && timing.requestStart) {
-        this.metrics.TTFB = timing.responseStart - timing.requestStart;
       }
+    });
+    paintObserver.observe({ entryTypes: ["paint"] });
 
-      // TTI (简化版本)
-      if (timing.loadEventEnd && timing.navigationStart) {
-        this.metrics.TTI = timing.loadEventEnd - timing.navigationStart;
+    // LCP (Largest Contentful Paint)
+    const lcpObserver = new PerformanceObserver((list) => {
+      const entries = list.getEntries();
+      const lastEntry = entries[entries.length - 1];
+      this.metrics.largestContentfulPaint = lastEntry.startTime;
+    });
+    lcpObserver.observe({ entryTypes: ["largest-contentful-paint"] });
+
+    // FID (First Input Delay)
+    const fidObserver = new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        const fidEntry = entry as PerformanceEventTiming;
+        this.metrics.firstInputDelay =
+          fidEntry.processingStart - fidEntry.startTime;
       }
-    }
+    });
+    fidObserver.observe({ entryTypes: ["first-input"] });
+
+    // CLS (Cumulative Layout Shift)
+    let clsValue = 0;
+    const clsObserver = new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        if (!(entry as any).hadRecentInput) {
+          clsValue += (entry as any).value;
+          this.metrics.cumulativeLayoutShift = clsValue;
+        }
+      }
+    });
+    clsObserver.observe({ entryTypes: ["layout-shift"] });
   }
 
-  // 获取性能指标
-  public getMetrics(): Partial<PerformanceMetrics> {
+  /**
+   * 获取性能指标
+   */
+  getMetrics(): PerformanceMetrics {
     return { ...this.metrics };
   }
 
-  // 上报性能数据
-  public report(callback?: (metrics: Partial<PerformanceMetrics>) => void) {
-    // 确保页面加载完成
-    if (document.readyState === "complete") {
-      this.sendReport(callback);
-    } else {
-      window.addEventListener("load", () => {
-        // 延迟一段时间确保所有指标都已收集
-        setTimeout(() => this.sendReport(callback), 1000);
-      });
-    }
+  /**
+   * 报告性能指标
+   */
+  report() {
+    setTimeout(() => {
+      const metrics = this.getMetrics();
+      console.group("🚀 性能指标");
+      console.log("DOM加载时间:", metrics.domContentLoaded, "ms");
+      console.log("页面完全加载时间:", metrics.loadComplete, "ms");
+      console.log("资源数量:", metrics.resourceCount);
+      console.log("资源加载总时间:", metrics.resourceDuration.toFixed(2), "ms");
+
+      if (metrics.firstPaint) {
+        console.log("首次绘制:", metrics.firstPaint.toFixed(2), "ms");
+      }
+      if (metrics.firstContentfulPaint) {
+        console.log(
+          "首次内容绘制:",
+          metrics.firstContentfulPaint.toFixed(2),
+          "ms",
+        );
+      }
+      if (metrics.largestContentfulPaint) {
+        console.log(
+          "最大内容绘制:",
+          metrics.largestContentfulPaint.toFixed(2),
+          "ms",
+        );
+      }
+      if (metrics.firstInputDelay !== undefined) {
+        console.log("首次输入延迟:", metrics.firstInputDelay.toFixed(2), "ms");
+      }
+      if (metrics.cumulativeLayoutShift !== undefined) {
+        console.log("累积布局偏移:", metrics.cumulativeLayoutShift.toFixed(3));
+      }
+      if (metrics.memoryUsed) {
+        console.log(
+          "内存使用:",
+          metrics.memoryUsed.toFixed(2),
+          "MB /",
+          metrics.memoryLimit?.toFixed(2),
+          "MB",
+        );
+      }
+      console.groupEnd();
+
+      // 性能评分
+      this.evaluatePerformance(metrics);
+    }, 3000); // 延迟3秒以确保所有指标都已收集
   }
 
-  private sendReport(
-    callback?: (metrics: Partial<PerformanceMetrics>) => void,
-  ) {
-    const metrics = this.getMetrics();
+  /**
+   * 评估性能
+   */
+  private evaluatePerformance(metrics: PerformanceMetrics) {
+    console.group("📊 性能评估");
 
-    // 控制台输出
-    console.log("性能指标:", metrics);
-
-    // 自定义回调
-    if (callback) {
-      callback(metrics);
+    // LCP 评分
+    if (metrics.largestContentfulPaint) {
+      if (metrics.largestContentfulPaint < 2500) {
+        console.log("✅ LCP 良好 (<2.5s)");
+      } else if (metrics.largestContentfulPaint < 4000) {
+        console.log("⚠️ LCP 需要改进 (2.5s-4s)");
+      } else {
+        console.log("❌ LCP 较差 (>4s)");
+      }
     }
 
-    // 这里可以将数据发送到分析服务器
-    // fetch('/api/performance', {
-    //   method: 'POST',
-    //   body: JSON.stringify(metrics)
-    // });
+    // FID 评分
+    if (metrics.firstInputDelay !== undefined) {
+      if (metrics.firstInputDelay < 100) {
+        console.log("✅ FID 良好 (<100ms)");
+      } else if (metrics.firstInputDelay < 300) {
+        console.log("⚠️ FID 需要改进 (100ms-300ms)");
+      } else {
+        console.log("❌ FID 较差 (>300ms)");
+      }
+    }
+
+    // CLS 评分
+    if (metrics.cumulativeLayoutShift !== undefined) {
+      if (metrics.cumulativeLayoutShift < 0.1) {
+        console.log("✅ CLS 良好 (<0.1)");
+      } else if (metrics.cumulativeLayoutShift < 0.25) {
+        console.log("⚠️ CLS 需要改进 (0.1-0.25)");
+      } else {
+        console.log("❌ CLS 较差 (>0.25)");
+      }
+    }
+
+    console.groupEnd();
   }
 
-  // 清理观察者
-  public destroy() {
-    this.observers.forEach((observer) => observer.disconnect());
-    this.observers.clear();
+  /**
+   * 标记自定义性能点
+   */
+  mark(name: string) {
+    performance.mark(name);
+  }
+
+  /**
+   * 测量两个标记之间的时间
+   */
+  measure(name: string, startMark: string, endMark: string) {
+    performance.measure(name, startMark, endMark);
+    const measure = performance.getEntriesByName(name, "measure")[0];
+    console.log(`⏱️ ${name}: ${measure.duration.toFixed(2)}ms`);
+    return measure.duration;
   }
 }
 
 // 导出单例
 export const performanceMonitor = new PerformanceMonitor();
 
-// React Hook
-export const usePerformanceReport = () => {
-  useEffect(() => {
-    performanceMonitor.report((metrics) => {
-      // 性能预警
-      if (metrics.LCP && metrics.LCP > 2500) {
-        console.warn("LCP 过高，用户体验可能受影响");
-      }
-      if (metrics.FID && metrics.FID > 100) {
-        console.warn("FID 过高，交互响应缓慢");
-      }
-      if (metrics.CLS && metrics.CLS > 0.1) {
-        console.warn("CLS 过高，页面布局不稳定");
-      }
-    });
+// 导出便捷方法
+export const measurePerformance = (
+  fn: () => void | Promise<void>,
+  name: string,
+) => {
+  const startMark = `${name}-start`;
+  const endMark = `${name}-end`;
 
-    return () => {
-      performanceMonitor.destroy();
-    };
-  }, []);
+  performanceMonitor.mark(startMark);
+
+  const result = fn();
+
+  if (result instanceof Promise) {
+    return result.finally(() => {
+      performanceMonitor.mark(endMark);
+      performanceMonitor.measure(name, startMark, endMark);
+    });
+  } else {
+    performanceMonitor.mark(endMark);
+    performanceMonitor.measure(name, startMark, endMark);
+    return result;
+  }
 };

@@ -12,12 +12,6 @@ const include = [
   "react/jsx-dev-runtime",
   "react-router-dom",
 
-  // UI 库 - Mantine 相关（只包含主包）
-  "@mantine/core",
-  "@mantine/hooks",
-  "@mantine/notifications",
-  "@tabler/icons-react",
-
   // 状态管理
   "zustand",
   "@tanstack/react-query",
@@ -33,15 +27,11 @@ const include = [
   "responsive-storage",
 
   // Hooks 库
-  "ahooks",
   "react-use",
   "react-hook-form",
 
-  // 动画
-  "framer-motion",
-
-  // 图标
-  "@ant-design/icons",
+  // 其他
+  "react-helmet-async",
 
   // 内部包
   "@packages/mobile-utils",

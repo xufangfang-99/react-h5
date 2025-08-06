@@ -1,6 +1,4 @@
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import { AppShell, Tabs, rem, Box } from "@mantine/core";
-import { IconHome, IconList, IconPhoto, IconUser } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { AuthGuard, RouteListener } from "@/router/guards";
 
@@ -25,8 +23,6 @@ const Layout = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState("home");
 
-  const iconStyle = { width: rem(20), height: rem(20) };
-
   // 根据路由更新 Tab
   useEffect(() => {
     const tab = pathToTab[location.pathname];
@@ -35,8 +31,8 @@ const Layout = () => {
     }
   }, [location.pathname]);
 
-  const handleTabChange = (value: string | null) => {
-    if (value && tabToPath[value]) {
+  const handleTabChange = (value: string) => {
+    if (tabToPath[value]) {
       navigate(tabToPath[value]);
     }
   };
@@ -48,55 +44,35 @@ const Layout = () => {
   return (
     <AuthGuard>
       <RouteListener>
-        <AppShell
-          header={{ height: 0 }}
-          navbar={{ width: 0, breakpoint: 0 }}
-          padding={0}
-        >
-          <Box className="mobile-container">
-            <Box
-              className={`flex-1 overflow-auto ${shouldShowTabBar ? "" : "h-full"}`}
-            >
-              <Outlet />
-            </Box>
+        <div className="mobile-container">
+          <div
+            className={`flex-1 overflow-auto ${shouldShowTabBar ? "" : "h-full"}`}
+          >
+            <Outlet />
+          </div>
 
-            {shouldShowTabBar && (
-              <Tabs
-                value={activeTab}
-                onChange={handleTabChange}
-                variant="default"
-                className="border-t"
-              >
-                <Tabs.List grow>
-                  <Tabs.Tab
-                    value="home"
-                    leftSection={<IconHome style={iconStyle} />}
-                  >
-                    首页
-                  </Tabs.Tab>
-                  <Tabs.Tab
-                    value="demo"
-                    leftSection={<IconList style={iconStyle} />}
-                  >
-                    工具演示
-                  </Tabs.Tab>
-                  <Tabs.Tab
-                    value="gallery"
-                    leftSection={<IconPhoto style={iconStyle} />}
-                  >
-                    图片画廊
-                  </Tabs.Tab>
-                  <Tabs.Tab
-                    value="user"
-                    leftSection={<IconUser style={iconStyle} />}
-                  >
-                    我的
-                  </Tabs.Tab>
-                </Tabs.List>
-              </Tabs>
-            )}
-          </Box>
-        </AppShell>
+          {shouldShowTabBar && (
+            <nav className="border-t bg-white">
+              <ul className="flex">
+                {Object.entries(tabToPath).map(([key]) => (
+                  <li key={key} className="flex-1">
+                    <button
+                      onClick={() => handleTabChange(key)}
+                      className={`w-full py-3 text-center ${
+                        activeTab === key ? "text-primary-500" : "text-gray-600"
+                      }`}
+                    >
+                      {key === "home" && "首页"}
+                      {key === "demo" && "演示"}
+                      {key === "gallery" && "图片"}
+                      {key === "user" && "我的"}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
+        </div>
       </RouteListener>
     </AuthGuard>
   );

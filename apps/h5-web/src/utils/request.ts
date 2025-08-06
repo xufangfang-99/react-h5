@@ -1,38 +1,73 @@
-import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
-import { getNetworkInfo, isSlowNetwork } from "@packages/mobile-utils";
+import axios, {
+  type AxiosInstance,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+} from "axios";
+import { isSlowNetwork } from "@packages/mobile-utils";
 
-// 请求队列管理
-class RequestQueue {
-  private queue: Map<string, AbortController> = new Map();
-
-  add(key: string, controller: AbortController) {
-    // 如果已存在相同请求，取消之前的
-    if (this.queue.has(key)) {
-      this.queue.get(key)?.abort();
-    }
-    this.queue.set(key, controller);
-  }
-
-  remove(key: string) {
-    this.queue.delete(key);
-  }
-
-  cancelAll() {
-    this.queue.forEach((controller) => controller.abort());
-    this.queue.clear();
-  }
-
-  // 添加公共方法来获取队列大小
-  size(): number {
-    return this.queue.size;
+// 扩展 AxiosRequestConfig 类型
+declare module "axios" {
+  export interface AxiosRequestConfig {
+    cache?: boolean;
+    cacheTime?: number;
   }
 }
 
-const requestQueue = new RequestQueue();
+// 请求缓存
+interface CacheItem {
+  data: any;
+  timestamp: number;
+  expires: number;
+}
+
+class RequestCache {
+  private cache = new Map<string, CacheItem>();
+
+  set(key: string, data: any, expires: number = 5 * 60 * 1000) {
+    this.cache.set(key, {
+      data,
+      timestamp: Date.now(),
+      expires,
+    });
+  }
+
+  get(key: string): any | null {
+    const item = this.cache.get(key);
+    if (!item) return null;
+
+    if (Date.now() - item.timestamp > item.expires) {
+      this.cache.delete(key);
+      return null;
+    }
+
+    return item.data;
+  }
+
+  clear() {
+    this.cache.clear();
+  }
+
+  // 清理过期缓存
+  cleanup() {
+    const now = Date.now();
+    for (const [key, item] of this.cache.entries()) {
+      if (now - item.timestamp > item.expires) {
+        this.cache.delete(key);
+      }
+    }
+  }
+}
+
+// 创建缓存实例
+const requestCache = new RequestCache();
+
+// 定期清理缓存
+setInterval(() => requestCache.cleanup(), 60 * 1000);
 
 // 创建 axios 实例
-const createRequest = (): AxiosInstance => {
+const createAxiosInstance = (): AxiosInstance => {
   const instance = axios.create({
+    baseURL: import.meta.env.VITE_API_BASE_URL || "/api",
     timeout: 10000,
     headers: {
       "Content-Type": "application/json",
@@ -42,47 +77,20 @@ const createRequest = (): AxiosInstance => {
   // 请求拦截器
   instance.interceptors.request.use(
     (config) => {
-      // 根据网络状态调整配置
-      const networkInfo = getNetworkInfo();
-
-      // 慢速网络优化
+      // 根据网络状态调整超时时间
       if (isSlowNetwork()) {
-        // 增加超时时间
-        config.timeout = 30000;
-
-        // 添加低质量标记（后端可据此返回精简数据）
-        config.headers["X-Network-Quality"] = "low";
-
-        // 添加具体的网络信息到请求头（供后端参考）
-        config.headers["X-Network-Type"] = networkInfo.type;
-        config.headers["X-Network-Effective-Type"] =
-          networkInfo.effectiveType || "unknown";
-
-        // 限制并发请求数
-        if (requestQueue.size() > 2) {
-          console.warn("慢速网络，限制并发请求");
-          return Promise.reject(new Error("网络繁忙，请稍后重试"));
-        }
-      } else {
-        // 正常网络也可以传递网络信息
-        config.headers["X-Network-Type"] = networkInfo.type;
-
-        // 如果是 WiFi 或 5G，可以请求高质量数据
-        if (networkInfo.type === "wifi" || networkInfo.type === "5g") {
-          config.headers["X-Network-Quality"] = "high";
-        }
+        config.timeout = 30000; // 慢速网络增加超时时间
       }
 
-      // 为请求创建取消令牌
-      const controller = new AbortController();
-      config.signal = controller.signal;
+      // 添加 token
+      const token = localStorage.getItem("token");
+      if (token && config.headers) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
 
-      // 生成请求唯一标识
-      const requestKey = `${config.method}-${config.url}`;
-      requestQueue.add(requestKey, controller);
-
-      // 添加请求时间戳（用于缓存控制）
-      config.headers["X-Request-Time"] = Date.now();
+      // 添加请求标识
+      config.headers["X-Request-Id"] =
+        `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
       return config;
     },
@@ -94,30 +102,25 @@ const createRequest = (): AxiosInstance => {
   // 响应拦截器
   instance.interceptors.response.use(
     (response) => {
-      // 移除已完成的请求
-      const requestKey = `${response.config.method}-${response.config.url}`;
-      requestQueue.remove(requestKey);
-
-      // 记录响应时间（用于性能监控）
-      const requestTime = response.config.headers["X-Request-Time"];
-      if (requestTime) {
-        const duration = Date.now() - requestTime;
-        console.debug(`请求耗时: ${response.config.url} - ${duration}ms`);
+      // 缓存 GET 请求
+      if (response.config.method === "get" && response.config.cache !== false) {
+        const cacheKey = getCacheKey(response.config);
+        const cacheTime = response.config.cacheTime || 5 * 60 * 1000;
+        requestCache.set(cacheKey, response.data, cacheTime);
       }
 
       return response;
     },
     (error) => {
-      // 移除失败的请求
-      if (error.config) {
-        const requestKey = `${error.config.method}-${error.config.url}`;
-        requestQueue.remove(requestKey);
-      }
-
-      // 网络错误重试逻辑
-      if (error.message === "Network Error" && !error.config._retry) {
-        error.config._retry = true;
-        return instance(error.config);
+      // 网络错误处理
+      if (!error.response) {
+        console.error("网络错误:", error.message);
+        // 可以在这里添加离线提示
+      } else if (error.response?.status === 401) {
+        // 401 处理
+        // 清除 token，跳转登录
+        localStorage.removeItem("token");
+        window.location.href = "/login";
       }
 
       return Promise.reject(error);
@@ -127,63 +130,101 @@ const createRequest = (): AxiosInstance => {
   return instance;
 };
 
-// 导出请求实例
-export const request = createRequest();
+// 生成缓存键
+const getCacheKey = (config: AxiosRequestConfig): string => {
+  const { url, method, params, data } = config;
+  return `${method}-${url}-${JSON.stringify(params || {})}-${JSON.stringify(data || {})}`;
+};
 
-// 请求缓存
-const cache = new Map<string, { data: any; timestamp: number }>();
-const CACHE_DURATION = 5 * 60 * 1000; // 5分钟
+// 请求实例
+const request = createAxiosInstance();
 
-/**
- * 带缓存的 GET 请求
- */
-export const cachedGet = async <T = any>(
+// 带缓存的 GET 请求
+export const getWithCache = async <T = any>(
   url: string,
-  config?: AxiosRequestConfig,
+  config?: AxiosRequestConfig & { cache?: boolean; cacheTime?: number },
 ): Promise<T> => {
-  const cacheKey = url + JSON.stringify(config?.params || {});
-  const cached = cache.get(cacheKey);
+  const cacheKey = getCacheKey({ ...config, url, method: "get" });
 
-  // 检查缓存是否有效
-  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-    console.debug(`使用缓存: ${url}`);
-    return cached.data;
-  }
-
-  // 发起请求
-  const response = await request.get<T>(url, config);
-
-  // 更新缓存
-  cache.set(cacheKey, {
-    data: response.data,
-    timestamp: Date.now(),
-  });
-
-  // 限制缓存大小
-  if (cache.size > 50) {
-    const firstKey = cache.keys().next().value;
-    if (firstKey !== undefined) {
-      cache.delete(firstKey);
+  // 检查缓存
+  if (config?.cache !== false) {
+    const cached = requestCache.get(cacheKey);
+    if (cached) {
+      console.log(`[Cache Hit] ${url}`);
+      return cached;
     }
   }
 
+  console.log(`[Cache Miss] ${url}`);
+  const response = await request.get<T>(url, config);
   return response.data;
 };
 
-// 清理函数
-export const clearRequestCache = () => cache.clear();
-export const cancelAllRequests = () => requestQueue.cancelAll();
+// 并发请求控制
+export const requestQueue = {
+  queue: [] as Array<() => Promise<any>>,
+  running: 0,
+  maxConcurrent: 4,
 
-// 根据网络状态动态调整请求配置的工具函数
-export const getOptimizedRequestConfig = (): Partial<AxiosRequestConfig> => {
-  const networkInfo = getNetworkInfo();
-  const config: Partial<AxiosRequestConfig> = {};
+  add<T>(fn: () => Promise<T>): Promise<T> {
+    return new Promise((resolve, reject) => {
+      this.queue.push(async () => {
+        try {
+          const result = await fn();
+          resolve(result);
+        } catch (error) {
+          reject(error);
+        }
+      });
+      this.process();
+    });
+  },
 
-  if (isSlowNetwork()) {
-    config.timeout = 30000; // 慢速网络增加超时
-  } else if (networkInfo.type === "wifi" || networkInfo.type === "5g") {
-    config.timeout = 5000; // 高速网络减少超时
-  }
-
-  return config;
+  async process() {
+    while (this.running < this.maxConcurrent && this.queue.length > 0) {
+      const fn = this.queue.shift();
+      if (fn) {
+        this.running++;
+        fn().finally(() => {
+          this.running--;
+          this.process();
+        });
+      }
+    }
+  },
 };
+
+// 请求重试
+export const retryRequest = async <T>(
+  fn: () => Promise<T>,
+  retries = 3,
+  delay = 1000,
+): Promise<T> => {
+  try {
+    return await fn();
+  } catch (error) {
+    if (retries > 0) {
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      return retryRequest(fn, retries - 1, delay * 2);
+    }
+    throw error;
+  }
+};
+
+// 请求取消
+export const createCancelToken = () => {
+  const source = axios.CancelToken.source();
+  return {
+    token: source.token,
+    cancel: source.cancel,
+  };
+};
+
+// 导出工具方法
+export const clearRequestCache = () => requestCache.clear();
+
+// 导出请求实例
+export { request };
+
+// 导出类型
+export type { AxiosInstance, AxiosRequestConfig, AxiosResponse };

@@ -93,17 +93,6 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     if (metaThemeColor) {
       metaThemeColor.setAttribute("content", themeColor);
     }
-
-    // 更新 Mantine 主题
-    const mantineTheme = {
-      primaryColor: theme === "dark" ? "blue" : theme,
-      colorScheme: THEMES[theme].mode,
-    };
-
-    // 触发自定义事件，让 Mantine Provider 响应
-    window.dispatchEvent(
-      new CustomEvent("theme-change", { detail: mantineTheme }),
-    );
   }, [theme]);
 
   // 监听系统主题变化
@@ -136,30 +125,4 @@ export const useTheme = () => {
     throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
-};
-
-// 主题切换器组件
-export const ThemeSwitcher: React.FC = () => {
-  const { theme, setTheme, themes } = useTheme();
-
-  return (
-    <div className="flex gap-2 p-4">
-      {Object.entries(themes).map(([key, config]) => (
-        <button
-          key={key}
-          onClick={() => setTheme(key as ThemeName)}
-          className={`
-            w-10 h-10 rounded-full border-2 transition-all
-            ${theme === key ? "scale-110 border-gray-800" : "border-gray-300"}
-          `}
-          style={{ backgroundColor: config.primary }}
-          title={config.name}
-        >
-          {theme === key && (
-            <span className="block w-full h-full rounded-full bg-white/30" />
-          )}
-        </button>
-      ))}
-    </div>
-  );
 };
