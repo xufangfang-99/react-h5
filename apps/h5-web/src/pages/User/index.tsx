@@ -1,19 +1,3 @@
-import {
-  Box,
-  Card,
-  Title,
-  Text,
-  Avatar,
-  Button,
-  Stack,
-  Group,
-} from "@mantine/core";
-import {
-  IconUser,
-  IconSettings,
-  IconLogout,
-  IconChevronRight,
-} from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/auth";
 
@@ -23,7 +7,6 @@ const User = () => {
 
   const menuItems = [
     {
-      icon: IconSettings,
       label: "设置",
       path: "/settings",
     },
@@ -36,83 +19,65 @@ const User = () => {
 
   if (!isAuthenticated) {
     return (
-      <Box p="md">
-        <Card shadow="sm" padding="xl" radius="md" withBorder ta="center">
-          <Avatar size={80} radius="xl" mx="auto" mb="md" color="gray">
-            <IconUser size={40} />
-          </Avatar>
-          <Title order={4} mb="sm">
-            未登录
-          </Title>
-          <Text size="sm" c="dimmed" mb="md">
-            登录后查看个人信息
-          </Text>
-          <Button onClick={() => navigate("/login")} fullWidth>
+      <div className="p-4">
+        <div className="bg-white rounded-lg shadow-sm p-6 text-center">
+          <div className="w-20 h-20 rounded-full bg-gray-200 mx-auto mb-4 flex items-center justify-center">
+            <span className="text-3xl">👤</span>
+          </div>
+          <h4 className="text-lg font-semibold mb-2">未登录</h4>
+          <p className="text-sm text-gray-600 mb-4">登录后查看个人信息</p>
+          <button
+            onClick={() => navigate("/login")}
+            className="w-full py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 transition-colors"
+          >
             立即登录
-          </Button>
-        </Card>
-      </Box>
+          </button>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Box p="md">
-      <Card shadow="sm" padding="xl" radius="md" withBorder mb="md">
-        <Stack align="center" gap="md">
-          <Avatar size={80} radius="xl" color="blue">
+    <div className="p-4">
+      <div className="bg-white rounded-lg shadow-sm p-6 mb-4">
+        <div className="text-center">
+          <div className="w-20 h-20 rounded-full bg-blue-500 text-white mx-auto mb-4 flex items-center justify-center text-3xl font-bold">
             {user?.name?.[0]?.toUpperCase() || "U"}
-          </Avatar>
-          <div className="text-center">
-            <Title order={4}>{user?.name || "用户"}</Title>
-            <Text size="sm" c="dimmed">
-              {user?.email || "user@example.com"}
-            </Text>
           </div>
-        </Stack>
-      </Card>
+          <h4 className="text-lg font-semibold">{user?.name || "用户"}</h4>
+          <p className="text-sm text-gray-600">
+            {user?.email || "user@example.com"}
+          </p>
+        </div>
+      </div>
 
-      <Stack gap="xs">
-        {menuItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <Card
-              key={item.path}
-              shadow="sm"
-              padding="md"
-              radius="md"
-              withBorder
-              className="cursor-pointer hover:bg-gray-50"
-              onClick={() => navigate(item.path)}
-            >
-              <Group justify="space-between">
-                <Group gap="md">
-                  <Icon size={20} />
-                  <Text>{item.label}</Text>
-                </Group>
-                <IconChevronRight size={16} className="text-gray-400" />
-              </Group>
-            </Card>
-          );
-        })}
+      <div className="space-y-2">
+        {menuItems.map((item) => (
+          <button
+            key={item.path}
+            onClick={() => navigate(item.path)}
+            className="w-full bg-white rounded-lg shadow-sm p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+          >
+            <span className="flex items-center gap-3">
+              <span>⚙️</span>
+              <span>{item.label}</span>
+            </span>
+            <span className="text-gray-400">›</span>
+          </button>
+        ))}
 
-        <Card
-          shadow="sm"
-          padding="md"
-          radius="md"
-          withBorder
-          className="cursor-pointer hover:bg-gray-50"
+        <button
           onClick={handleLogout}
+          className="w-full bg-white rounded-lg shadow-sm p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
         >
-          <Group justify="space-between">
-            <Group gap="md">
-              <IconLogout size={20} className="text-red-500" />
-              <Text c="red">退出登录</Text>
-            </Group>
-            <IconChevronRight size={16} className="text-gray-400" />
-          </Group>
-        </Card>
-      </Stack>
-    </Box>
+          <span className="flex items-center gap-3 text-red-500">
+            <span>🚪</span>
+            <span>退出登录</span>
+          </span>
+          <span className="text-gray-400">›</span>
+        </button>
+      </div>
+    </div>
   );
 };
 

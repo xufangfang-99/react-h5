@@ -1,19 +1,15 @@
-import { Box, Loader, Text } from "@mantine/core";
-
 interface LoadingProps {
   tip?: string;
 }
 
 const Loading = ({ tip = "加载中..." }: LoadingProps) => {
   return (
-    <Box className="flex items-center justify-center min-h-[200px]">
+    <div className="flex items-center justify-center min-h-[200px]">
       <div className="text-center">
-        <Loader size="lg" variant="bars" mb="sm" />
-        <Text size="sm" c="dimmed">
-          {tip}
-        </Text>
+        <div className="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+        <p className="text-sm text-gray-600">{tip}</p>
       </div>
-    </Box>
+    </div>
   );
 };
 

@@ -1,18 +1,5 @@
 import { useState } from "react";
-import {
-  Box,
-  Card,
-  Title,
-  TextInput,
-  PasswordInput,
-  Button,
-  Stack,
-  Text,
-  Checkbox,
-} from "@mantine/core";
-import { IconUser, IconLock } from "@tabler/icons-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { notifications } from "@mantine/notifications";
 import { useAuthStore } from "@/store/auth";
 
 const Login = () => {
@@ -33,10 +20,7 @@ const Login = () => {
     e.preventDefault();
 
     if (!formData.username || !formData.password) {
-      notifications.show({
-        message: "请填写用户名和密码",
-        color: "red",
-      });
+      alert("请填写用户名和密码");
       return;
     }
 
@@ -54,11 +38,6 @@ const Login = () => {
 
       login(mockUser, mockToken);
 
-      notifications.show({
-        message: "登录成功",
-        color: "green",
-      });
-
       // 跳转到之前的页面或首页
       navigate(from, { replace: true });
 
@@ -67,61 +46,74 @@ const Login = () => {
   };
 
   return (
-    <Box className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <Card
-        shadow="sm"
-        padding="xl"
-        radius="md"
-        withBorder
-        className="w-full max-w-sm"
-      >
-        <Title order={3} ta="center" mb="lg">
-          欢迎登录
-        </Title>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-sm bg-white rounded-lg shadow-md p-6">
+        <h3 className="text-xl font-semibold text-center mb-6">欢迎登录</h3>
 
         <form onSubmit={handleSubmit}>
-          <Stack gap="md">
-            <TextInput
-              label="用户名"
-              placeholder="请输入用户名"
-              leftSection={<IconUser size={16} />}
-              value={formData.username}
-              onChange={(e) =>
-                setFormData({ ...formData, username: e.currentTarget.value })
-              }
-              required
-            />
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                用户名
+              </label>
+              <input
+                type="text"
+                placeholder="请输入用户名"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                value={formData.username}
+                onChange={(e) =>
+                  setFormData({ ...formData, username: e.target.value })
+                }
+                required
+              />
+            </div>
 
-            <PasswordInput
-              label="密码"
-              placeholder="请输入密码"
-              leftSection={<IconLock size={16} />}
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.currentTarget.value })
-              }
-              required
-            />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                密码
+              </label>
+              <input
+                type="password"
+                placeholder="请输入密码"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+                required
+              />
+            </div>
 
-            <Checkbox
-              label="记住我"
-              checked={formData.remember}
-              onChange={(e) =>
-                setFormData({ ...formData, remember: e.currentTarget.checked })
-              }
-            />
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="remember"
+                className="mr-2"
+                checked={formData.remember}
+                onChange={(e) =>
+                  setFormData({ ...formData, remember: e.target.checked })
+                }
+              />
+              <label htmlFor="remember" className="text-sm text-gray-600">
+                记住我
+              </label>
+            </div>
 
-            <Button type="submit" fullWidth loading={loading}>
-              登录
-            </Button>
-          </Stack>
+            <button
+              type="submit"
+              className="w-full py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 transition-colors disabled:opacity-50"
+              disabled={loading}
+            >
+              {loading ? "登录中..." : "登录"}
+            </button>
+          </div>
         </form>
 
-        <Text size="sm" ta="center" mt="md" c="dimmed">
+        <p className="text-sm text-center text-gray-500 mt-4">
           测试账号：任意用户名和密码
-        </Text>
-      </Card>
-    </Box>
+        </p>
+      </div>
+    </div>
   );
 };
 

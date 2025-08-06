@@ -1,14 +1,4 @@
 import { useState } from "react";
-import {
-  Card,
-  Title,
-  Text,
-  Badge,
-  Button,
-  Tabs,
-  ScrollArea,
-} from "@mantine/core";
-import { notifications } from "@mantine/notifications";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { useImagePreloader } from "@/hooks/useImagePreloader";
 import {
@@ -107,18 +97,22 @@ export default function ImageGalleryPage() {
     },
   ];
 
+  const tabs = [
+    { id: "gallery", label: "风景画廊" },
+    { id: "products", label: "产品展示" },
+    { id: "demo", label: "功能演示" },
+  ];
+
   // 加载中界面
   if (!allLoaded) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <Text size="lg" c="dimmed">
-            加载资源中...
-          </Text>
-          <Text size="sm" c="dimmed" mt="xs">
+          <p className="text-lg text-gray-600">加载资源中...</p>
+          <p className="text-sm text-gray-500 mt-1">
             {Math.round(progress * 100)}%
-          </Text>
+          </p>
         </div>
       </div>
     );
@@ -129,260 +123,238 @@ export default function ImageGalleryPage() {
       {/* 页面标题 */}
       <div className="bg-white shadow-sm sticky top-0 z-10">
         <div className="p-4">
-          <Title order={3}>图片画廊</Title>
-          <Text size="sm" c="dimmed">
-            智能图片加载演示
-          </Text>
+          <h3 className="text-xl font-bold">图片画廊</h3>
+          <p className="text-sm text-gray-600">智能图片加载演示</p>
         </div>
       </div>
 
       {/* 网络状态提示 */}
       <div className="p-4">
-        <Card shadow="sm" padding="md" radius="md" withBorder>
+        <div className="bg-white rounded-lg shadow-sm p-4">
           <div className="flex items-center justify-between">
             <div>
-              <Text size="sm" fw={500}>
-                当前网络状态
-              </Text>
-              <Text size="xs" c="dimmed">
+              <p className="text-sm font-medium">当前网络状态</p>
+              <p className="text-xs text-gray-600">
                 {networkInfo.online ? "在线" : "离线"} · {networkInfo.type} ·
                 推荐质量: {recommendedQuality}
-              </Text>
+              </p>
             </div>
-            <Badge color={networkInfo.online ? "green" : "red"}>
+            <span
+              className={`px-2 py-1 rounded text-sm ${
+                networkInfo.online
+                  ? "bg-green-100 text-green-600"
+                  : "bg-red-100 text-red-600"
+              }`}
+            >
               {networkInfo.effectiveType || networkInfo.type}
-            </Badge>
+            </span>
           </div>
-        </Card>
+        </div>
       </div>
 
       {/* 标签页 */}
-      <Tabs
-        value={activeTab}
-        onChange={(value) => setActiveTab(value || "gallery")}
-      >
-        <Tabs.List className="sticky top-16 bg-white z-10 px-4">
-          <Tabs.Tab value="gallery">风景画廊</Tabs.Tab>
-          <Tabs.Tab value="products">产品展示</Tabs.Tab>
-          <Tabs.Tab value="demo">功能演示</Tabs.Tab>
-        </Tabs.List>
+      <div className="sticky top-16 bg-white z-10 border-b">
+        <div className="flex">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-1 py-3 text-center border-b-2 transition-colors ${
+                activeTab === tab.id
+                  ? "border-primary-500 text-primary-500"
+                  : "border-transparent text-gray-600"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </div>
 
-        {/* 风景画廊 */}
-        <Tabs.Panel value="gallery" pt="md">
-          <div className="p-4 space-y-4">
+      {/* Tab Content */}
+      <div className="p-4">
+        {activeTab === "gallery" && (
+          <div className="space-y-4">
             {galleryImages.map((image) => (
-              <Card key={image.id} shadow="sm" radius="md" withBorder>
-                <Card.Section>
-                  <OptimizedImage
-                    src={image.src}
-                    sources={image.sources}
-                    alt={image.title}
-                    className="w-full h-64"
-                    lazy
-                    autoQuality
-                    onLoad={() => {
-                      console.log(`${image.title} 加载完成`);
-                    }}
-                  />
-                </Card.Section>
+              <div
+                key={image.id}
+                className="bg-white rounded-lg shadow-sm overflow-hidden"
+              >
+                <OptimizedImage
+                  src={image.src}
+                  sources={image.sources}
+                  alt={image.title}
+                  className="w-full h-64"
+                  lazy
+                  autoQuality
+                  onLoad={() => {
+                    console.log(`${image.title} 加载完成`);
+                  }}
+                />
                 <div className="p-3">
-                  <Text fw={500}>{image.title}</Text>
-                  <Text size="xs" c="dimmed">
+                  <p className="font-medium">{image.title}</p>
+                  <p className="text-xs text-gray-600">
                     根据网络自动选择图片质量
-                  </Text>
+                  </p>
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
-        </Tabs.Panel>
+        )}
 
-        {/* 产品展示 */}
-        <Tabs.Panel value="products" pt="md">
-          <div className="p-4">
-            <div className="grid grid-cols-2 gap-4">
-              {productImages.map((product) => (
-                <Card key={product.id} shadow="sm" radius="md" withBorder>
-                  <Card.Section>
+        {activeTab === "products" && (
+          <div className="grid grid-cols-2 gap-4">
+            {productImages.map((product) => (
+              <div
+                key={product.id}
+                className="bg-white rounded-lg shadow-sm overflow-hidden"
+              >
+                <OptimizedImage
+                  src={product.src}
+                  alt={product.name}
+                  className="aspect-square"
+                  lazy
+                  autoQuality={false}
+                />
+                <div className="p-3">
+                  <p className="text-sm font-medium truncate">{product.name}</p>
+                  <p className="text-lg text-red-500 font-bold">
+                    {product.price}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {activeTab === "demo" && (
+          <div className="space-y-6">
+            {/* 加载状态演示 */}
+            <div className="bg-white rounded-lg shadow-sm p-4">
+              <h5 className="text-base font-semibold mb-3">1. 加载状态</h5>
+              <p className="text-sm text-gray-600 mb-3">
+                展示加载中、加载失败等状态
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs mb-2">正常加载</p>
+                  <OptimizedImage
+                    src="/images/demo-1.jpg"
+                    alt="正常加载"
+                    className="aspect-video rounded"
+                    lazy={false}
+                  />
+                </div>
+                <div>
+                  <p className="text-xs mb-2">加载失败</p>
+                  <OptimizedImage
+                    src="/images/not-exist.jpg"
+                    alt="加载失败"
+                    className="aspect-video rounded"
+                    lazy={false}
+                    onError={() => {
+                      console.log("图片加载失败");
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* 懒加载演示 */}
+            <div className="bg-white rounded-lg shadow-sm p-4">
+              <h5 className="text-base font-semibold mb-3">2. 懒加载</h5>
+              <p className="text-sm text-gray-600 mb-3">
+                向下滚动查看图片懒加载效果
+              </p>
+              <div className="space-y-4">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i}>
+                    <p className="text-sm mb-2">图片 {i}</p>
                     <OptimizedImage
-                      src={product.src}
-                      alt={product.name}
-                      className="aspect-square"
+                      src={`/images/lazy-${i}.jpg`}
+                      alt={`懒加载图片 ${i}`}
+                      className="w-full h-48 rounded"
                       lazy
-                      autoQuality={false} // 产品图片使用固定质量
+                      placeholder="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23999'%3E等待加载...%3C/text%3E%3C/svg%3E"
                     />
-                  </Card.Section>
-                  <div className="p-3">
-                    <Text size="sm" fw={500} lineClamp={1}>
-                      {product.name}
-                    </Text>
-                    <Text size="lg" c="red" fw={700}>
-                      {product.price}
-                    </Text>
                   </div>
-                </Card>
-              ))}
+                ))}
+              </div>
+            </div>
+
+            {/* 不同尺寸展示 */}
+            <div className="bg-white rounded-lg shadow-sm p-4">
+              <h5 className="text-base font-semibold mb-3">3. 响应式尺寸</h5>
+              <p className="text-sm text-gray-600 mb-3">
+                不同尺寸和比例的图片展示
+              </p>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-xs mb-2">16:9 横幅</p>
+                  <OptimizedImage
+                    src="/images/banner.jpg"
+                    alt="横幅"
+                    className="w-full aspect-video rounded"
+                    lazy
+                  />
+                </div>
+                <div>
+                  <p className="text-xs mb-2">1:1 正方形</p>
+                  <OptimizedImage
+                    src="/images/square.jpg"
+                    alt="正方形"
+                    className="w-32 h-32 rounded"
+                    lazy
+                  />
+                </div>
+                <div>
+                  <p className="text-xs mb-2">圆形头像</p>
+                  <OptimizedImage
+                    src="/images/avatar.jpg"
+                    alt="头像"
+                    className="w-20 h-20 rounded-full"
+                    lazy={false}
+                    autoQuality={false}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* 操作按钮 */}
+            <div className="bg-white rounded-lg shadow-sm p-4">
+              <h5 className="text-base font-semibold mb-3">4. 交互操作</h5>
+              <div className="space-y-3">
+                <button
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="w-full py-2 bg-primary-500 text-white rounded"
+                >
+                  回到顶部
+                </button>
+                <button
+                  onClick={() => {
+                    alert(
+                      `网络类型: ${networkInfo.type}, 质量: ${recommendedQuality}`,
+                    );
+                  }}
+                  className="w-full py-2 border border-primary-500 text-primary-500 rounded"
+                >
+                  查看网络详情
+                </button>
+                <button
+                  onClick={() => {
+                    window.location.reload();
+                  }}
+                  className="w-full py-2 border border-red-500 text-red-500 rounded"
+                >
+                  刷新页面
+                </button>
+              </div>
             </div>
           </div>
-        </Tabs.Panel>
-
-        {/* 功能演示 */}
-        <Tabs.Panel value="demo" pt="md">
-          <ScrollArea className="p-4">
-            <div className="space-y-6">
-              {/* 加载状态演示 */}
-              <Card shadow="sm" padding="lg" radius="md" withBorder>
-                <Title order={5} mb="md">
-                  1. 加载状态
-                </Title>
-                <Text size="sm" c="dimmed" mb="md">
-                  展示加载中、加载失败等状态
-                </Text>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Text size="xs" mb="xs">
-                      正常加载
-                    </Text>
-                    <OptimizedImage
-                      src="/images/demo-1.jpg"
-                      alt="正常加载"
-                      className="aspect-video rounded"
-                      lazy={false}
-                    />
-                  </div>
-                  <div>
-                    <Text size="xs" mb="xs">
-                      加载失败
-                    </Text>
-                    <OptimizedImage
-                      src="/images/not-exist.jpg"
-                      alt="加载失败"
-                      className="aspect-video rounded"
-                      lazy={false}
-                      onError={() => {
-                        notifications.show({
-                          message: "图片加载失败",
-                          color: "red",
-                        });
-                      }}
-                    />
-                  </div>
-                </div>
-              </Card>
-
-              {/* 懒加载演示 */}
-              <Card shadow="sm" padding="lg" radius="md" withBorder>
-                <Title order={5} mb="md">
-                  2. 懒加载
-                </Title>
-                <Text size="sm" c="dimmed" mb="md">
-                  向下滚动查看图片懒加载效果
-                </Text>
-                <div className="space-y-4">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <div key={i}>
-                      <Text size="sm" mb="xs">
-                        图片 {i}
-                      </Text>
-                      <OptimizedImage
-                        src={`/images/lazy-${i}.jpg`}
-                        alt={`懒加载图片 ${i}`}
-                        className="w-full h-48 rounded"
-                        lazy
-                        placeholder="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23999'%3E等待加载...%3C/text%3E%3C/svg%3E"
-                      />
-                    </div>
-                  ))}
-                </div>
-              </Card>
-
-              {/* 不同尺寸展示 */}
-              <Card shadow="sm" padding="lg" radius="md" withBorder>
-                <Title order={5} mb="md">
-                  3. 响应式尺寸
-                </Title>
-                <Text size="sm" c="dimmed" mb="md">
-                  不同尺寸和比例的图片展示
-                </Text>
-                <div className="space-y-4">
-                  <div>
-                    <Text size="xs" mb="xs">
-                      16:9 横幅
-                    </Text>
-                    <OptimizedImage
-                      src="/images/banner.jpg"
-                      alt="横幅"
-                      className="w-full aspect-video rounded"
-                      lazy
-                    />
-                  </div>
-                  <div>
-                    <Text size="xs" mb="xs">
-                      1:1 正方形
-                    </Text>
-                    <OptimizedImage
-                      src="/images/square.jpg"
-                      alt="正方形"
-                      className="w-32 h-32 rounded"
-                      lazy
-                    />
-                  </div>
-                  <div>
-                    <Text size="xs" mb="xs">
-                      圆形头像
-                    </Text>
-                    <OptimizedImage
-                      src="/images/avatar.jpg"
-                      alt="头像"
-                      className="w-20 h-20 rounded-full"
-                      lazy={false}
-                      autoQuality={false}
-                    />
-                  </div>
-                </div>
-              </Card>
-
-              {/* 操作按钮 */}
-              <Card shadow="sm" padding="lg" radius="md" withBorder>
-                <Title order={5} mb="md">
-                  4. 交互操作
-                </Title>
-                <div className="space-y-3">
-                  <Button
-                    fullWidth
-                    onClick={() => {
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                    }}
-                  >
-                    回到顶部
-                  </Button>
-                  <Button
-                    fullWidth
-                    variant="light"
-                    onClick={() => {
-                      notifications.show({
-                        title: "网络信息",
-                        message: `类型: ${networkInfo.type}, 质量: ${recommendedQuality}`,
-                      });
-                    }}
-                  >
-                    查看网络详情
-                  </Button>
-                  <Button
-                    fullWidth
-                    variant="outline"
-                    color="red"
-                    onClick={() => {
-                      window.location.reload();
-                    }}
-                  >
-                    刷新页面
-                  </Button>
-                </div>
-              </Card>
-            </div>
-          </ScrollArea>
-        </Tabs.Panel>
-      </Tabs>
+        )}
+      </div>
     </div>
   );
 }
