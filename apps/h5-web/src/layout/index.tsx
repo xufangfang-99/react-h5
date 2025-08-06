@@ -4,28 +4,28 @@ import { IconHome, IconList, IconPhoto, IconUser } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { AuthGuard, RouteListener } from "@/router/guards";
 
+// 路由映射到 Tab
+const pathToTab: Record<string, string> = {
+  "/": "home",
+  "/demo": "demo",
+  "/gallery": "gallery",
+  "/user": "user",
+};
+
+// Tab 映射到路由
+const tabToPath: Record<string, string> = {
+  home: "/",
+  demo: "/demo",
+  gallery: "/gallery",
+  user: "/user",
+};
+
 const Layout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState("home");
 
   const iconStyle = { width: rem(20), height: rem(20) };
-
-  // 路由映射到 Tab
-  const pathToTab: Record<string, string> = {
-    "/": "home",
-    "/demo": "demo",
-    "/gallery": "gallery",
-    "/user": "user",
-  };
-
-  // Tab 映射到路由
-  const tabToPath: Record<string, string> = {
-    home: "/",
-    demo: "/demo",
-    gallery: "/gallery",
-    user: "/user",
-  };
 
   // 根据路由更新 Tab
   useEffect(() => {
