@@ -88,6 +88,7 @@ export default {
     "**/.vite/**",
     "**/.husky/**",
     "**/coverage/**",
+    "**/report.html",
   ],
   overrides: [
     {

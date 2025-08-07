@@ -12,13 +12,15 @@
     "preview": "pnpm --filter @apps/h5-web preview:build",
     "test": "pnpm --filter './packages/*' test",
     "typecheck": "pnpm --filter @apps/h5-web typecheck",
+    "report": "pnpm --filter @apps/h5-web report",
     "lint": "pnpm run lint:eslint && pnpm run lint:prettier && pnpm run lint:stylelint",
     "lint:eslint": "eslint . --cache",
     "lint:prettier": "prettier --write \"**/*.{js,ts,json,tsx,css,scss,html,md}\"",
     "lint:stylelint": "stylelint \"**/*.{css,scss,less}\" --cache --fix",
     "lint:markdown": "markdownlint \"**/*.md\" --fix --ignore node_modules --ignore \"**/node_modules/**\"",
     "clean": "pnpm --filter './apps/*' --filter './packages/*' clean:cache",
-    "prepare": "husky"
+    "prepare": "pnpm shared-config husky:init",
+    "husky:clean": "pnpm shared-config husky:init"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",

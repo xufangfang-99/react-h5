@@ -4,7 +4,8 @@
   "description": "Shared configurations for monorepo",
   "type": "module",
   "bin": {
-    "fix-markdown": "./scripts/fix-markdown.js"
+    "fix-markdown": "./scripts/fix-markdown.js",
+    "shared-config": "./bin/shared-config.cjs"
   },
   "exports": {
     "./eslint": "./eslint/index.js",
@@ -13,7 +14,8 @@
     "./prettier": "./prettier/index.js",
     "./stylelint": "./stylelint/index.js",
     "./commitlint": "./commitlint/index.js",
-    "./markdownlint": "./markdownlint/index.js"
+    "./markdownlint": "./markdownlint/index.js",
+    "./husky": "./husky/index.cjs"
   },
   "files": [
     "eslint",
@@ -22,11 +24,13 @@
     "commitlint",
     "markdownlint",
     "scripts",
-    "husky"
+    "husky",
+    "bin"
   ],
   "dependencies": {
     "glob": "^11.0.3",
-    "typescript-eslint": "^8.38.0"
+    "typescript-eslint": "^8.38.0",
+    "commander": "^12.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
