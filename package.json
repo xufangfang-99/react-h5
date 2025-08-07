@@ -9,7 +9,7 @@
     "build": "pnpm --filter @apps/h5-web build",
     "build:all": "pnpm --filter './apps/*' --filter './packages/*' build",
     "build:packages": "pnpm --filter './packages/*' build",
-    "preview": "pnpm --filter @apps/h5-web preview:build",
+    "preview": "pnpm build:packages && pnpm --filter @apps/h5-web preview:build",
     "test": "pnpm --filter './packages/*' test",
     "typecheck": "pnpm --filter @apps/h5-web typecheck",
     "report": "pnpm --filter @apps/h5-web report",
