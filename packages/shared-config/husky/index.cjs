@@ -1,4 +1,3 @@
-// CommonJS 格式 - 使用 require 和 module.exports
 const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
