@@ -37,7 +37,7 @@
 
 ### 安装依赖
 
-```bash
+````bash
 # 克隆项目
 git clone https://github.com/your-username/react-h5-web.git
 
@@ -46,7 +46,7 @@ cd react-h5-web
 
 # 安装依赖（请使用 pnpm）
 pnpm install
-```
+```text
 
 ### 开发启动
 
@@ -56,7 +56,7 @@ pnpm dev
 
 # 或者
 pnpm serve
-```
+```text
 
 ### 构建打包
 
@@ -69,7 +69,7 @@ pnpm build:staging
 
 # 构建并生成分析报告
 pnpm report
-```
+```text
 
 ### 其他命令
 
@@ -88,7 +88,7 @@ pnpm lint
 
 # 清理缓存
 pnpm clean:cache
-```
+```text
 
 ## 📂 项目结构
 
@@ -128,20 +128,20 @@ react-h5-web/
 ├── tsconfig.json      # TypeScript 配置
 ├── uno.config.ts      # UnoCSS 配置
 └── vite.config.ts     # Vite 配置
-```
+```text
 
 ## 🔧 环境变量
 
 项目使用 `envs` 文件夹管理环境变量：
 
-| 变量名              | 说明               | 默认值 |
+| 变量名 | 说明 | 默认值 |
 | ------------------- | ------------------ | ------ |
-| VITE_PORT           | 开发服务器端口     | 3000   |
-| VITE_PUBLIC_PATH    | 公共路径           | /      |
-| VITE_ROUTER_HISTORY | 路由模式 (hash/h5) | hash   |
-| VITE_CDN            | 是否使用 CDN       | false  |
-| VITE_COMPRESSION    | 压缩方式           | none   |
-| VITE_HIDE_HOME      | 是否隐藏首页       | false  |
+| VITE_PORT | 开发服务器端口 | 3000 |
+| VITE_PUBLIC_PATH | 公共路径 | / |
+| VITE_ROUTER_HISTORY | 路由模式 (hash/h5) | hash |
+| VITE_CDN | 是否使用 CDN | false |
+| VITE_COMPRESSION | 压缩方式 | none |
+| VITE_HIDE_HOME | 是否隐藏首页 | false |
 
 ## 🎨 样式方案
 
@@ -153,7 +153,7 @@ react-h5-web/
 <div className="flex items-center justify-between p-4">
   <button className="btn-primary">按钮</button>
 </div>
-```
+```text
 
 ### 移动端适配方案
 
@@ -171,7 +171,7 @@ react-h5-web/
 
 /* 或使用 UnoCSS */
 <div class="h-[11.733vw] text-[4.267vw]">
-```
+```text
 
 ### 1px 边框解决方案
 
@@ -179,7 +179,7 @@ react-h5-web/
 
 ```jsx
 <div className="border-1px">1像素边框</div>
-```
+```text
 
 ## 🚀 开发指南
 
@@ -192,7 +192,7 @@ import Component from "@/components/Component";
 import { useCustomHook } from "@/hooks/useCustomHook";
 import { api } from "@/services/api";
 import { utils } from "@/utils";
-```
+```text
 
 ### 代码检查器
 
@@ -219,7 +219,7 @@ export default [
     },
   },
 ];
-```
+```text
 
 ### 状态管理
 
@@ -233,7 +233,7 @@ export const useUserStore = create((set) => ({
   user: null,
   setUser: (user) => set({ user }),
 }));
-```
+```css
 
 ## 📱 移动端优化
 
@@ -277,7 +277,7 @@ pnpm lint:markdown
 
 # 修复 Markdown 文件
 pnpm fix:markdown
-```
+````
 
 ## 🤝 贡献指南
 

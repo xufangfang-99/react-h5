@@ -1,0 +1,58 @@
+{
+  "name": "@packages/shared-config",
+  "version": "1.0.0",
+  "description": "Shared configurations for monorepo",
+  "type": "module",
+  "bin": {
+    "fix-markdown": "./scripts/fix-markdown.js"
+  },
+  "exports": {
+    "./eslint": "./eslint/index.js",
+    "./eslint/base": "./eslint/base.js",
+    "./eslint/react": "./eslint/react.js",
+    "./prettier": "./prettier/index.js",
+    "./stylelint": "./stylelint/index.js",
+    "./commitlint": "./commitlint/index.js",
+    "./markdownlint": "./markdownlint/index.js"
+  },
+  "files": [
+    "eslint",
+    "prettier",
+    "stylelint",
+    "commitlint",
+    "markdownlint",
+    "scripts",
+    "husky"
+  ],
+  "dependencies": {
+    "glob": "^11.0.3",
+    "typescript-eslint": "^8.38.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@eslint/js": "^9.32.0",
+    "@types/node": "^20.19.9",
+    "eslint": "^9.30.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-markdown": "^5.1.0",
+    "eslint-plugin-prettier": "^5.5.3",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.3.0",
+    "markdownlint-cli": "^0.45.0",
+    "prettier": "^3.6.2",
+    "stylelint": "^16.23.0",
+    "stylelint-config-html": "^1.1.0",
+    "stylelint-config-recess-order": "^7.1.0",
+    "stylelint-config-standard": "^37.0.0",
+    "stylelint-config-standard-scss": "^15.0.1",
+    "stylelint-prettier": "^5.0.3",
+    "stylelint-scss": "^6.12.1",
+    "typescript": "^5.8.3"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0"
+  }
+}

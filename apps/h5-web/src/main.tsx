@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
+import App from "./App";
 import { ThemeProvider } from "./components/ThemeProvider";
 
 // 引入样式 - 按优先级排序

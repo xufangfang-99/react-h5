@@ -4,10 +4,10 @@
 
 ## 安装
 
-```bash
+````bash
 # 在 monorepo 根目录运行
 pnpm --filter @apps/h5-web add @packages/mobile-utils
-```
+```css
 
 ## 功能模块
 
@@ -42,7 +42,7 @@ if (isIOS()) {
 if (isWeChat()) {
   console.log("微信环境");
 }
-```
+```css
 
 ### 2. 手势识别 (gesture)
 
@@ -60,7 +60,7 @@ const recognizer = new GestureRecognizer(element);
 element.addEventListener("swipe", (e) => {
   console.log("滑动事件:", e.detail);
 });
-```
+```css
 
 ### 3. 网络状态 (network)
 
@@ -84,7 +84,7 @@ const cleanup = onNetworkChange((info) => {
 // 根据网络选择图片质量
 const quality = getRecommendedImageQuality();
 const imageUrl = `/images/photo_${quality}.jpg`;
-```
+```css
 
 ### 4. 存储工具 (storage)
 
@@ -101,7 +101,7 @@ secureStorage.set("token", "secret-token");
 // Cookie 操作
 cookie.set("session", "abc123", { expires: 7 * 24 * 60 * 60 * 1000 });
 const session = cookie.get("session");
-```
+```css
 
 ### 5. 格式化工具 (format)
 
@@ -122,7 +122,7 @@ formatMoney(1234.5, { prefix: "$", decimals: 0 }); // "$1,235"
 
 // 相对时间
 formatRelativeTime(new Date(Date.now() - 60000)); // "1分钟前"
-```
+```css
 
 ### 6. DOM 操作 (dom)
 
@@ -143,7 +143,7 @@ scrollToElement("#target", { offset: 60, duration: 500 });
 
 // 复制到剪贴板
 const success = await copyToClipboard("复制的文本");
-```
+```css
 
 ### 7. React Hooks
 
@@ -184,7 +184,7 @@ function Settings() {
     </button>
   );
 }
-```
+````
 
 ## 完整 API 文档
 

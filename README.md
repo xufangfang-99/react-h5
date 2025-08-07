@@ -13,7 +13,7 @@
 
 ## 📦 项目结构
 
-```
+```bash
 react-h5-monorepo/
 ├── apps/                      # 应用目录
 │   └── h5-web/               # 移动端 H5 应用
@@ -39,7 +39,7 @@ react-h5-monorepo/
 
 ### 安装依赖
 
-```bash
+````bash
 # 克隆项目
 git clone https://github.com/xufangfang-99/react-h5.git
 
@@ -48,7 +48,7 @@ cd react-h5
 
 # 安装所有依赖
 pnpm install
-```
+```text
 
 ### 开发命令
 
@@ -70,7 +70,7 @@ pnpm lint
 
 # 类型检查
 pnpm typecheck
-```
+```css
 
 ## 📁 子项目说明
 
@@ -111,7 +111,7 @@ pnpm typecheck
 # 在 apps 目录下创建新应用
 cd apps
 pnpm create vite my-app --template react-ts
-```
+```text
 
 ### 添加新包
 
@@ -120,7 +120,7 @@ pnpm create vite my-app --template react-ts
 mkdir packages/my-package
 cd packages/my-package
 pnpm init
-```
+```text
 
 ### 依赖管理
 
@@ -136,7 +136,7 @@ pnpm --filter @packages/mobile-utils add -D @types/node
 
 # 添加内部依赖
 pnpm --filter @apps/h5-web add @packages/mobile-utils
-```
+```text
 
 ### 运行特定项目命令
 
@@ -148,7 +148,7 @@ pnpm --filter @apps/h5-web build
 # 运行特定包的命令
 pnpm --filter @packages/mobile-utils build
 pnpm --filter @packages/mobile-utils test
-```
+```bash
 
 ## 🔧 配置说明
 
@@ -160,7 +160,7 @@ pnpm --filter @packages/mobile-utils test
 packages:
   - "apps/*"
   - "packages/*"
-```
+```css
 
 ### 代码规范
 
@@ -199,7 +199,7 @@ git commit -m "docs: 更新 README"
 git commit -m "feat!: 重构路由系统
 
 BREAKING CHANGE: 路由配置方式发生变化"
-```
+```css
 
 详细规范请查看 [COMMIT_CONVENTION.md](./COMMIT_CONVENTION.md)
 
@@ -216,7 +216,7 @@ apps/h5-web/dist/
 
 # 工具库构建产物
 packages/mobile-utils/dist/
-```
+```text
 
 ### Docker 部署（示例）
 
@@ -228,7 +228,7 @@ RUN npm install -g pnpm
 RUN pnpm install --frozen-lockfile
 RUN pnpm build:all
 # ... 后续部署步骤
-```
+````
 
 ## 🤝 贡献指南
 

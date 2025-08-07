@@ -18,7 +18,7 @@
     "lint:prettier": "prettier --write  \"src/**/*.{js,ts,json,tsx,css,scss,html,md}\"",
     "lint:stylelint": "stylelint --cache --fix \"**/*.{html,css,scss,less}\" --cache-location node_modules/.cache/stylelint/",
     "lint:markdown": "markdownlint \"**/*.md\" --fix",
-    "fix:markdown": "node scripts/fix-markdown.js",
+    "fix:markdown": "fix-markdown",
     "lint": "pnpm lint:eslint && pnpm lint:prettier && pnpm lint:stylelint && pnpm lint:markdown"
   },
   "keywords": [
@@ -32,6 +32,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@packages/shared-config": "workspace:*",
     "@packages/mobile-utils": "workspace:*",
     "@pureadmin/utils": "^2.6.2",
     "@tanstack/react-query": "^5.62.12",
