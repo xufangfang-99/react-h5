@@ -1,27 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import { ThemeProvider } from "./components/ThemeProvider";
 
-// 引入样式 - 按优先级排序
+// 样式
 import "virtual:uno.css";
-import "@/styles/index.scss";
+import "./styles/index.scss";
 
-// 异步导入性能监控，避免阻塞首次渲染
-if (import.meta.env.DEV) {
-  import("@/utils/performanceMonitor").then(({ performanceMonitor }) => {
-    performanceMonitor.report();
-  });
-}
-
-// 创建根节点
-const root = ReactDOM.createRoot(document.getElementById("root")!);
+// 主题初始化
+import { theme } from "@/design-tokens";
+theme.init();
 
 // 渲染应用
-root.render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider defaultTheme="default">
+    <BrowserRouter>
       <App />
-    </ThemeProvider>
+    </BrowserRouter>
   </React.StrictMode>,
 );

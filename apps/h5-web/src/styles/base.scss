@@ -1,0 +1,18 @@
+// 最小化的全局重置
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  // 修复移动端 100vh 问题
+  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
+  margin: 0;
+}
+
+// 移动端点击优化
+html {
+  -webkit-tap-highlight-color: transparent;
+}

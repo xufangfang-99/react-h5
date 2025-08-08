@@ -1,37 +1,32 @@
-import { RouterProvider } from "react-router-dom";
-import { router } from "./router";
-import { useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
+import { MainLayout } from "@/layouts/MainLayout";
+import { BlankLayout } from "@/layouts/BlankLayout";
+
+// 导入新创建的页面
+import { HomePage } from "@/pages/Home";
+
+// 其他示例页面
+const AboutPage = () => <div className="p-4">关于</div>;
+const NotFound = () => <div className="p-4">404 - 页面未找到</div>;
 
 function App() {
-  useEffect(() => {
-    // 添加结构化数据
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.text = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      name: "React H5 Web",
-      description: "现代化移动端应用开发框架",
-      url: window.location.origin,
-      applicationCategory: "DeveloperApplication",
-      operatingSystem: "All",
-      offers: {
-        "@type": "Offer",
-        price: "0",
-        priceCurrency: "CNY",
-      },
-      author: {
-        "@type": "Organization",
-        name: "Your Company",
-      },
-    });
-    document.head.appendChild(script);
+  return (
+    <Routes>
+      {/* 主布局路由 */}
+      <Route path="/" element={<MainLayout />}>
+        <Route index element={<HomePage />} /> {/* 使用新的 HomePage */}
+        <Route path="about" element={<AboutPage />} />
+      </Route>
 
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
-  return <RouterProvider router={router} />;
+      {/* 空白布局路由 */}
+      <Route path="/blank" element={<BlankLayout />}>
+        <Route path="test" element={<div>空白布局测试页</div>} />
+      </Route>
+
+      {/* 404 */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
 }
 
 export default App;

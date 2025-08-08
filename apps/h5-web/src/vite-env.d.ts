@@ -1,8 +1,21 @@
 /// <reference types="vite/client" />
-/// <reference types="vite-svg-loader" />
 
-// UnoCSS 虚拟模块
-declare module "virtual:uno.css" {
+// 环境变量类型
+interface ImportMetaEnv {
+  readonly VITE_APP_TITLE: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+
+// 模块声明
+declare module "*.svg" {
   const content: string;
   export default content;
+}
+
+declare module "*.module.scss" {
+  const classes: { readonly [key: string]: string };
+  export default classes;
 }

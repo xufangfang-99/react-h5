@@ -50,6 +50,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
           drop_console: true,
           drop_debugger: true,
           pure_funcs: ["console.log", "console.info", "console.debug"],
+          passes: 2, // 多次压缩
         },
         format: {
           comments: false, // 删除注释

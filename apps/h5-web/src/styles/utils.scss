@@ -1,0 +1,25 @@
+// 1px 边框（mobile 必需）
+.hairline {
+  position: relative;
+
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    pointer-events: none;
+    content: "";
+    border: 1px solid #e5e7eb;
+    transform: scale(0.5);
+    transform-origin: 0 0;
+  }
+}
+
+// 多行文本省略
+.line-clamp-2 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
