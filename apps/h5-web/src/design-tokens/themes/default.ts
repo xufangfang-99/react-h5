@@ -5,9 +5,9 @@ const theme: ThemeConfig = {
   name: "默认主题",
   colors: {
     // 主色
-    "color-primary": "#3b82f6",
-    "color-primary-light": "#60a5fa",
-    "color-primary-dark": "#2563eb",
+    "color-primary": "#2563eb",
+    "color-primary-light": "#3b82f6",
+    "color-primary-dark": "#1d4ed8",
 
     // 背景色
     "color-bg": "#ffffff",
