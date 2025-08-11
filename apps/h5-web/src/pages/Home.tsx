@@ -1,3 +1,6 @@
+import { Button } from "@/components/Button";
+import { Card } from "@/components/Card";
+
 export const HomePage = () => {
   return (
     <div className="p-5 pb-10">
@@ -7,31 +10,29 @@ export const HomePage = () => {
       <section className="mb-8">
         <h2 className="text-xl font-bold mb-4">按钮示例</h2>
         <div className="flex gap-4 flex-wrap">
-          <button className="btn">主要按钮</button>
-          <button className="btn-outline">次要按钮</button>
-          <button className="btn" disabled>
-            禁用按钮
-          </button>
+          <Button>主要按钮</Button>
+          <Button variant="outline">次要按钮</Button>
+          <Button disabled>禁用按钮</Button>
         </div>
       </section>
 
       {/* 卡片示例 */}
       <section className="mb-8">
         <h2 className="text-xl font-bold mb-4">卡片示例</h2>
-        <div className="card p-4 mb-4">
+        <Card className="p-4 mb-4">
           <h3 className="text-lg font-medium mb-2">普通卡片</h3>
           <p className="text-secondary">
             这是卡片内容，用于展示分组信息。卡片会自动适应主题色。
           </p>
-        </div>
+        </Card>
 
         {/* 可点击的卡片 */}
-        <div className="card card-clickable p-4">
+        <Card clickable className="p-4">
           <p className="font-medium">可点击的卡片</p>
           <p className="text-sm text-secondary mt-1">
             鼠标悬停或点击试试看效果
           </p>
-        </div>
+        </Card>
       </section>
 
       {/* 1px 边框示例 - 最重要的部分 */}
@@ -42,7 +43,7 @@ export const HomePage = () => {
         </p>
 
         {/* 列表示例 - 最常用 */}
-        <div className="card mb-6 overflow-hidden">
+        <Card className="mb-6 overflow-hidden">
           <h3 className="font-medium p-4 bg-secondary">设置列表（底部边框）</h3>
           <div className="p-4 hairline-b flex-between">
             <div>
@@ -65,7 +66,7 @@ export const HomePage = () => {
             </div>
             <span className="text-secondary">→</span>
           </div>
-        </div>
+        </Card>
 
         {/* 顶部边框示例 */}
         <div className="mb-6">
@@ -92,7 +93,7 @@ export const HomePage = () => {
         </div>
 
         {/* 组合使用示例 */}
-        <div className="card overflow-hidden">
+        <Card className="overflow-hidden">
           <h3 className="font-medium p-4 bg-secondary hairline-b">表单示例</h3>
           <div className="p-4">
             <div className="mb-4">
@@ -111,15 +112,15 @@ export const HomePage = () => {
                 style={{ outline: "none" }}
               />
             </div>
-            <button className="btn w-full">登录</button>
+            <Button className="w-full">登录</Button>
           </div>
-        </div>
+        </Card>
       </section>
 
       {/* 主题效果展示 */}
       <section className="mb-8">
         <h2 className="text-xl font-bold mb-4">主题效果</h2>
-        <div className="card p-4">
+        <Card className="p-4">
           <p className="mb-2">当前主题会自动应用到所有组件：</p>
           <div className="space-y-2 text-sm">
             <p>
@@ -143,13 +144,13 @@ export const HomePage = () => {
           <p className="text-sm text-secondary mt-4">
             💡 点击右上角"切换主题"按钮查看效果
           </p>
-        </div>
+        </Card>
       </section>
 
       {/* 移动端优化说明 */}
       <section>
         <h2 className="text-xl font-bold mb-4">移动端优化</h2>
-        <div className="card p-4">
+        <Card className="p-4">
           <ul className="space-y-2 text-sm">
             <li>✓ 使用 postcss-px-to-viewport 自动转换单位</li>
             <li>✓ hairline 类实现真实 1px 边框</li>
@@ -157,7 +158,7 @@ export const HomePage = () => {
             <li>✓ 触摸优化，移除点击高亮</li>
             <li>✓ 响应式主题切换</li>
           </ul>
-        </div>
+        </Card>
       </section>
     </div>
   );

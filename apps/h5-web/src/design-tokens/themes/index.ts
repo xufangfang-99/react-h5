@@ -1,19 +1,5 @@
-import type { ThemeConfig } from "@/types/theme";
-
-// 自动导入所有主题
-const modules = import.meta.glob<{ default: ThemeConfig }>("./*.ts", {
-  eager: true,
-});
-
-// 主题映射表
-export const themes = new Map<string, ThemeConfig>();
-
-// 注册所有主题
-Object.entries(modules).forEach(([path, module]) => {
-  if (path === "./index.ts") return;
-
-  const theme = module.default;
-  if (theme?.id) {
-    themes.set(theme.id, theme);
-  }
-});
+// 只导出主题列表
+export const themeList = [
+  { id: "default", name: "默认主题" },
+  { id: "dark", name: "深色主题" },
+];

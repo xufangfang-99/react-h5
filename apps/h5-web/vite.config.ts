@@ -79,6 +79,12 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
             const facadeModuleId = chunkInfo.facadeModuleId
               ? chunkInfo.facadeModuleId.split("/").pop()
               : "chunk";
+
+            // 添加样式模块判断
+            if (facadeModuleId?.includes(".module")) {
+              return `static/css/[name]-[hash].js`;
+            }
+
             return `static/js/${facadeModuleId}-[hash].js`;
           },
           entryFileNames: "static/js/[name]-[hash].js",
@@ -91,6 +97,12 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
       chunkSizeWarningLimit: 500,
       // 启用 CSS 压缩
       cssMinify: "lightningcss", // 使用更快的 CSS 压缩器
+    },
+    css: {
+      modules: {
+        // 为 CSS Modules 生成更短的类名
+        generateScopedName: "[local]_[hash:base64:5]",
+      },
     },
     define: {
       __APP_INFO__: JSON.stringify(__APP_INFO__),

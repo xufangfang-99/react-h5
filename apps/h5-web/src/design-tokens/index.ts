@@ -1,31 +1,38 @@
-// 极简的主题管理器
+// 优化后的主题管理器
 class ThemeManager {
   private root = document.documentElement;
+  private loadedThemes = new Map<string, any>();
+
+  // 动态加载主题
+  async loadTheme(themeId: string) {
+    if (this.loadedThemes.has(themeId)) {
+      return this.loadedThemes.get(themeId);
+    }
+
+    try {
+      const module = await import(`./themes/${themeId}.ts`);
+      const theme = module.default;
+      this.loadedThemes.set(themeId, theme);
+      return theme;
+    } catch (error) {
+      console.error(`加载主题失败: ${themeId}`, error);
+      return null;
+    }
+  }
 
   // 应用主题
   async apply(themeId: string) {
-    try {
-      const { themes } = await import("./themes/index");
-      const theme = themes.get(themeId);
+    const theme = await this.loadTheme(themeId);
+    if (!theme) return;
 
-      if (!theme) {
-        console.warn(`主题 ${themeId} 不存在`);
-        return;
-      }
+    // 应用 CSS 变量
+    Object.entries(theme.colors).forEach(([key, value]) => {
+      this.root.style.setProperty(`--${key}`, String(value));
+    });
 
-      // 应用 CSS 变量
-      Object.entries(theme.colors).forEach(([key, value]) => {
-        this.root.style.setProperty(`--${key}`, String(value));
-      });
-
-      // 设置主题标识
-      this.root.setAttribute("data-theme", themeId);
-
-      // 保存到本地
-      localStorage.setItem("theme", themeId);
-    } catch (error) {
-      console.error("应用主题失败:", error);
-    }
+    // 设置主题标识
+    this.root.setAttribute("data-theme", themeId);
+    localStorage.setItem("theme", themeId);
   }
 
   // 获取当前主题
@@ -34,8 +41,8 @@ class ThemeManager {
   }
 
   // 初始化
-  init() {
-    this.apply(this.current());
+  async init() {
+    await this.apply(this.current());
   }
 }
 

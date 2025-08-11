@@ -7,54 +7,65 @@ import {
 } from "unocss";
 
 export default defineConfig({
+  // 指定扫描的内容
+  content: {
+    pipeline: {
+      include: [
+        // 默认
+        /\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/,
+        // 包含 src 下的 js/ts 文件
+        "src/**/*.{js,ts}",
+      ],
+    },
+  },
+
   presets: [
-    presetUno(), // 提供默认的原子化 CSS
-    presetAttributify(), // 支持属性模式
+    presetUno(),
+    presetAttributify(),
     presetIcons({
-      // 图标支持
       scale: 1.2,
       warn: false,
     }),
   ],
 
   shortcuts: [
-    // 布局相关 - 这些是常用的组合，适合放在这里
+    // 保持原有的 shortcuts
     ["flex-center", "flex items-center justify-center"],
     ["flex-between", "flex items-center justify-between"],
     ["flex-col-center", "flex flex-col items-center justify-center"],
 
-    // 移动端常用
     ["safe-bottom", "pb-[env(safe-area-inset-bottom)]"],
     ["safe-top", "pt-[env(safe-area-inset-top)]"],
 
-    // 文字省略
     ["text-ellipsis", "truncate"],
     ["text-ellipsis-2", "line-clamp-2"],
   ],
 
-  // 只定义简单的 CSS 变量映射规则
-  rules: [
-    // 文字颜色 - 简单映射到 CSS 变量
-    ["text-primary", { color: "var(--color-primary)" }],
-    ["text-base", { color: "var(--color-text)" }],
-    ["text-secondary", { color: "var(--color-text-secondary)" }],
-    ["text-success", { color: "var(--color-success)" }],
-    ["text-error", { color: "var(--color-error)" }],
-    ["text-warning", { color: "var(--color-warning)" }],
+  // 优化：使用 theme 配置替代部分 rules
+  theme: {
+    colors: {
+      // 映射到 CSS 变量
+      primary: "var(--color-primary)",
+      "primary-light": "var(--color-primary-light)",
+      "primary-dark": "var(--color-primary-dark)",
+      base: "var(--color-text)",
+      secondary: "var(--color-text-secondary)",
+      success: "var(--color-success)",
+      error: "var(--color-error)",
+      warning: "var(--color-warning)",
+    },
+  },
 
-    // 背景颜色
+  // 简化 rules，移除可以用 theme 替代的部分
+  rules: [
+    // 只保留背景色和边框色规则（因为 UnoCSS 默认不支持 bg-base 这种写法）
     ["bg-base", { "background-color": "var(--color-bg)" }],
     ["bg-secondary", { "background-color": "var(--color-bg-secondary)" }],
-    ["bg-primary", { "background-color": "var(--color-primary)" }],
-
-    // 边框颜色
     ["border-base", { "border-color": "var(--color-border)" }],
-    ["border-primary", { "border-color": "var(--color-primary)" }],
   ],
 
-  // 主题变体
+  // 保持原有的 variants
   variants: [
-    // 暗色模式支持
     (matcher) => {
       if (!matcher.startsWith("dark:")) return matcher;
       return {
