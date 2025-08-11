@@ -30,5 +30,8 @@
   "scss.validate": false,
   "less.validate": false,
   "npm.packageManager": "pnpm",
-  "eslint.packageManager": "pnpm"
+  "eslint.packageManager": "pnpm",
+  "yaml.schemas": {
+    "https://json.schemastore.org/pnpm-workspace.json": "pnpm-workspace.yaml"
+  }
 }
