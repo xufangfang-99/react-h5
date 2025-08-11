@@ -11,7 +11,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 import removeConsole from "vite-plugin-remove-console";
 import { codeInspectorPlugin } from "code-inspector-plugin";
 // import { vitePluginFakeServer } from "vite-plugin-fake-server";
-import { configurePWA } from "./pwa";
+// import { configurePWA } from "./pwa";
 
 // 导入类型
 type ViteCompression =
@@ -70,7 +70,7 @@ export function getPluginsList(
       scale: 1,
     }),
     // PWA 支持 - 只在生产环境启用
-    process.env.NODE_ENV === "production" ? configurePWA() : null,
+    // process.env.NODE_ENV === "production" ? configurePWA() : null,
     VITE_CDN ? cdn : null,
     configCompressPlugin(VITE_COMPRESSION),
     // 线上环境删除console
