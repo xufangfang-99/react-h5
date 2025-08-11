@@ -12,6 +12,14 @@ import "./styles/index.scss"; // 全局样式
 import { theme } from "@/design-tokens";
 theme.init();
 
+if (import.meta.env.VITE_CDN === "true") {
+  const link = document.createElement("link");
+  link.rel = "preconnect";
+  link.href = "https://cdn.bootcdn.net";
+  link.crossOrigin = "anonymous";
+  document.head.appendChild(link);
+}
+
 // 渲染应用
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
