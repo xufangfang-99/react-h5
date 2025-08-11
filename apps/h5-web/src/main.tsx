@@ -5,7 +5,8 @@ import App from "./App";
 
 // 样式
 import "virtual:uno.css";
-import "./styles/index.scss";
+import "./design-tokens/theme.scss"; // 主题 CSS 变量
+import "./styles/index.scss"; // 全局样式
 
 // 主题初始化
 import { theme } from "@/design-tokens";

@@ -1,0 +1,156 @@
+// 组件样式 - 使用 CSS 变量支持主题
+// 这些是复杂的组件样式，不适合放在 UnoCSS 中
+
+// 按钮组件
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 1.5;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 0.25rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: var(--color-primary-dark);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+// 轮廓按钮
+.btn-outline {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 1.5;
+  color: var(--color-primary);
+  text-decoration: none;
+  cursor: pointer;
+  background-color: transparent;
+  border: 1px solid var(--color-primary);
+  border-radius: 0.25rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: white;
+    background-color: var(--color-primary);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+// 卡片组件
+.card {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 10%),
+    0 1px 2px 0 rgb(0 0 0 / 6%);
+  transition: all 0.3s ease;
+
+  // 深色模式下调整阴影
+  [data-theme="dark"] & {
+    box-shadow:
+      0 1px 3px 0 rgb(0 0 0 / 30%),
+      0 1px 2px 0 rgb(0 0 0 / 20%);
+  }
+
+  // 可点击的卡片
+  &.card-clickable {
+    cursor: pointer;
+
+    &:hover {
+      box-shadow:
+        0 4px 6px -1px rgb(0 0 0 / 10%),
+        0 2px 4px -1px rgb(0 0 0 / 6%);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// 1px 边框（移动端）
+.hairline-t {
+  position: relative;
+
+  &::before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 1px;
+    content: "";
+    background-color: var(--color-border);
+    transform: scaleY(0.5);
+    transform-origin: 0 0;
+  }
+}
+
+.hairline-b {
+  position: relative;
+
+  &::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    content: "";
+    background-color: var(--color-border);
+    transform: scaleY(0.5);
+    transform-origin: 0 100%;
+  }
+}
+
+.hairline-l {
+  position: relative;
+
+  &::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 1px;
+    content: "";
+    background-color: var(--color-border);
+    transform: scaleX(0.5);
+    transform-origin: 0 0;
+  }
+}
+
+.hairline-r {
+  position: relative;
+
+  &::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 1px;
+    content: "";
+    background-color: var(--color-border);
+    transform: scaleX(0.5);
+    transform-origin: 100% 0;
+  }
+}

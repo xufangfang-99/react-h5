@@ -128,6 +128,7 @@ export default defineConfig([
       "react/jsx-uses-react": "off",
       "react/no-unknown-property": "off",
       "react/display-name": "off",
+      "react/no-unescaped-entities": "off",
     },
   },
   // Node.js 配置（构建脚本、配置文件等）
