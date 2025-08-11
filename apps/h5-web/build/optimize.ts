@@ -32,9 +32,6 @@ const include = [
 
   // 其他
   "react-helmet-async",
-
-  // 内部包
-  "@packages/mobile-utils",
 ];
 
 /**

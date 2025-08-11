@@ -1,24 +1,15 @@
-# React H5 Monorepo
+# React H5 Web App
 
-<p align="center">
-  <img src="https://img.shields.io/badge/React-19.1.0-blue.svg" alt="React">
-  <img src="https://img.shields.io/badge/Vite-7.0.6-646CFF.svg" alt="Vite">
-  <img src="https://img.shields.io/badge/TypeScript-5.8.3-blue.svg" alt="TypeScript">
-  <img src="https://img.shields.io/badge/pnpm_workspace-monorepo-F69220.svg" alt="pnpm workspace">
-  <img src="https://img.shields.io/badge/Node-%E2%89%A520.16.0%20||%20%E2%89%A522.11.0-green.svg" alt="Node">
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
-</p>
-
-基于 pnpm workspace 的 Monorepo 项目，包含移动端 H5 应用和共享工具库。
+一个基于 React 19 + TypeScript + Vite 的移动端应用...
 
 ## 📦 项目结构
 
 ```bash
 react-h5-monorepo/
-├── apps/                      # 应用目录
+├── apps/                     # 应用目录
 │   └── h5-web/               # 移动端 H5 应用
-├── packages/                  # 共享包目录
-│   └── mobile-utils/         # 移动端工具库
+├── packages/                 # 共享包目录
+│   └── shared-config/        # 通用构建库
 ├── .husky/                   # Git Hooks
 ├── .vscode/                  # VS Code 配置
 ├── eslint.config.js          # ESLint 配置
@@ -87,23 +78,7 @@ pnpm typecheck
 
 [查看详细文档](./apps/h5-web/README.md)
 
-### packages/mobile-utils
 
-移动端常用工具库，提供设备检测、手势识别、网络状态等功能。
-
-**功能模块：**
-
-- 📱 设备检测（Device）
-- 👆 手势识别（Gesture）
-- 🌐 网络状态（Network）
-- 💾 存储增强（Storage）
-- 🔧 格式化工具（Format）
-- 🎯 DOM 操作（DOM）
-- ⚛️ React Hooks
-
-[查看详细文档](./packages/mobile-utils/README.md)
-
-## 🛠️ 开发指南
 
 ### 添加新应用
 
@@ -131,11 +106,7 @@ pnpm add -D -w eslint
 # 给特定应用添加依赖
 pnpm --filter @apps/h5-web add axios
 
-# 给特定包添加依赖
-pnpm --filter @packages/mobile-utils add -D @types/node
 
-# 添加内部依赖
-pnpm --filter @apps/h5-web add @packages/mobile-utils
 ```text
 
 ### 运行特定项目命令
@@ -145,9 +116,6 @@ pnpm --filter @apps/h5-web add @packages/mobile-utils
 pnpm --filter @apps/h5-web dev
 pnpm --filter @apps/h5-web build
 
-# 运行特定包的命令
-pnpm --filter @packages/mobile-utils build
-pnpm --filter @packages/mobile-utils test
 ```bash
 
 ## 🔧 配置说明
@@ -214,8 +182,6 @@ pnpm build:all
 # H5 应用构建产物
 apps/h5-web/dist/
 
-# 工具库构建产物
-packages/mobile-utils/dist/
 ```text
 
 ### Docker 部署（示例）

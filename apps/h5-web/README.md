@@ -1,16 +1,6 @@
-# React H5 Mobile Web
+# React H5 Web App
 
-<p align="center">
-  <img src="https://img.shields.io/badge/React-19.1.0-blue.svg" alt="React">
-  <img src="https://img.shields.io/badge/Vite-7.0.6-646CFF.svg" alt="Vite">
-  <img src="https://img.shields.io/badge/TypeScript-5.8.3-blue.svg" alt="TypeScript">
-  <img src="https://img.shields.io/badge/Ant_Design_Mobile-5.39.0-1890FF.svg" alt="Ant Design Mobile">
-  <img src="https://img.shields.io/badge/Node-%E2%89%A520.19.0%20||%20%E2%89%A522.11.0-green.svg" alt="Node">
-  <img src="https://img.shields.io/badge/pnpm-%E2%89%A59.0.0-F69220.svg" alt="pnpm">
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
-</p>
-
-一个基于 React 19 + TypeScript + Vite + Ant Design Mobile 的现代化移动端应用，专为 H5 手机用户端开发而设计。
+一个基于 React 19 + TypeScript + Vite 的移动端应用...
 
 ## ✨ 特性
 

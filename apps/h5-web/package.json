@@ -32,7 +32,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@packages/mobile-utils": "workspace:*",
     "@packages/shared-config": "workspace:*",
     "@pureadmin/utils": "^2.6.2",
     "@tanstack/react-query": "^5.62.12",

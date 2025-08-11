@@ -73,8 +73,6 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
             "state-vendor": ["zustand", "@tanstack/react-query"],
             // 工具库
             "utils-vendor": ["axios", "dayjs", "lodash-es", "clsx"],
-            // 内部包
-            "mobile-utils": ["@packages/mobile-utils"],
           },
           // 静态资源分类打包
           chunkFileNames: (chunkInfo) => {
