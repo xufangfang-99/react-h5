@@ -1,26 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import App from "./App";
 
-// 样式 - 按重要性排序
+// 样式
 import "virtual:uno.css";
-import "./design-tokens/theme.scss";
-import "./styles/index.scss";
+import "./design-tokens/theme.scss"; // 主题 CSS 变量
+import "./styles/index.scss"; // 全局样式
 
-// 主题初始化 - 尽快执行
+// 主题初始化
 import { theme } from "@/design-tokens";
 theme.init();
-
-// 动态导入 App 组件
-const App = React.lazy(() => import("./App"));
 
 // 渲染应用
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <React.Suspense fallback={null}>
-        <App />
-      </React.Suspense>
+      <App />
     </BrowserRouter>
   </React.StrictMode>,
 );
