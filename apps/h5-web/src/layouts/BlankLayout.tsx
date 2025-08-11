@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 
 export const BlankLayout = () => {
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
+    <div className="min-h-screen bg-base text-base">
       <Outlet />
     </div>
   );

@@ -1,9 +1,4 @@
-// 主题类型
-export interface ThemeConfig {
-  id: string;
-  name: string;
-  colors: Record<string, string>;
-}
+import type { ThemeConfig } from "@/types/theme";
 
 // 自动导入所有主题
 const modules = import.meta.glob<{ default: ThemeConfig }>("./*.ts", {

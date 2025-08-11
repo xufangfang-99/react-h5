@@ -1,4 +1,4 @@
-import type { ThemeConfig } from "./index";
+import type { ThemeConfig } from "@/types/theme";
 
 const theme: ThemeConfig = {
   id: "default",

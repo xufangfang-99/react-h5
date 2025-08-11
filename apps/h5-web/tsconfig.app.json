@@ -37,11 +37,12 @@
       "@styles/*": ["src/styles/*"],
       "@store/*": ["src/store/*"],
       "@router/*": ["src/router/*"],
-      "@layout/*": ["src/layout/*"]
+      "@layouts/*": ["src/layouts/*"],
+      "@types/*": ["src/types/*"]
     },
 
     /* Type definitions */
     "types": ["node", "vite/client", "unplugin-icons/types/react"]
   },
-  "include": ["src", "mock/*.ts", "types/*.d.ts", "vite.config.ts"]
+  "include": ["src", "mock/*.ts", "types/build-env.d.ts", "vite.config.ts"]
 }

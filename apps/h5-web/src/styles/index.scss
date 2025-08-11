@@ -1,6 +1,5 @@
 // 使用 @forward 统一导出，其他地方只需要 @use "@/styles"
 @forward "variables";
-@forward "utils";
 
 // base 不需要 forward，因为它是全局样式
 @use "base";
