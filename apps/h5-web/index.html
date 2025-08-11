@@ -124,9 +124,15 @@
 
     <!-- Service Worker 延迟注册 -->
     <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker.register("/registerSW.js").catch(() => {});
+      if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/registerSW.js')
+            .catch(err => {
+              // 只在开发环境打印错误
+              if (import.meta.env.DEV) {
+                console.log('SW registration failed:', err);
+              }
+            });
         });
       }
     </script>
