@@ -1,11 +1,15 @@
 import { Outlet, NavLink } from "react-router-dom";
-import { theme } from "@/design-tokens";
+import { useTheme } from "@/store/hooks";
+import { theme as themeManager } from "@/design-tokens";
+import { useEffect } from "react";
 
 export const MainLayout = () => {
-  const toggleTheme = () => {
-    const current = theme.current();
-    theme.apply(current === "default" ? "dark" : "default");
-  };
+  const { theme, toggleTheme } = useTheme();
+
+  // 同步主题到主题管理器
+  useEffect(() => {
+    themeManager.apply(theme);
+  }, [theme]);
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     `no-underline transition-colors ${isActive ? "text-primary" : "text-base"}`;
