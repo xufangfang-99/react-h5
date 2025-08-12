@@ -1,10 +1,10 @@
 import { Outlet, NavLink } from "react-router-dom";
-import { useTheme } from "@/store/hooks";
+import { useTheme } from "@/store"; // 改为从新的 store 导入
 import { theme as themeManager } from "@/design-tokens";
 import { useEffect } from "react";
 
 export const MainLayout = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme(); // 使用新的 hook
 
   // 同步主题到主题管理器
   useEffect(() => {

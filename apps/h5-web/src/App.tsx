@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Provider } from "jotai";
+import { Provider } from "@/store"; // 从新的 store 导入 Provider
 import { MainLayout } from "@/layouts/MainLayout";
 import { BlankLayout } from "@/layouts/BlankLayout";
 
