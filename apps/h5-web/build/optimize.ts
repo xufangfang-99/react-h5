@@ -13,7 +13,7 @@ const include = [
   "react-router-dom",
 
   // 状态管理
-  "zustand",
+  // "zustand",
   "@tanstack/react-query",
 
   // 工具库

@@ -1,0 +1,110 @@
+// src/pages/home/templates/t2/styles/index.module.scss
+.template2 {
+  // 模板2的整体风格
+  background: linear-gradient(to bottom, #fff5f5, #fff);
+}
+
+.title {
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bannerSection {
+  margin-bottom: 3rem;
+}
+
+.productSection {
+  margin-bottom: 3rem;
+}
+
+.sectionTitle {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.hotIcon {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.productCard {
+  position: relative;
+  background: white !important;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+
+  &:hover {
+    box-shadow: 0 4px 16px rgb(255 107 107 / 20%);
+  }
+}
+
+.tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  font-weight: bold;
+  color: white;
+  background: #ff6b6b;
+  border-radius: 4px;
+}
+
+.priceBox {
+  margin: 0.5rem 0;
+}
+
+.price {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #ff6b6b;
+}
+
+.originalPrice {
+  margin-right: 0.5rem;
+  font-size: 0.875rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.discountPrice {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ff6b6b;
+}
+
+.buyButton {
+  width: 100%;
+  padding: 0.75rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+  border: none;
+  border-radius: 6px;
+  transition: all 0.3s;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgb(255 107 107 / 30%);
+    transform: translateY(-2px);
+  }
+}

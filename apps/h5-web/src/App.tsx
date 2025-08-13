@@ -1,10 +1,11 @@
+// src/App.tsx
 import { Routes, Route } from "react-router-dom";
-import { Provider } from "@/store"; // 从新的 store 导入 Provider
+import { Provider } from "@/store";
 import { MainLayout } from "@/layouts/MainLayout";
 import { BlankLayout } from "@/layouts/BlankLayout";
 
-// 导入页面
-import { HomePage } from "@/pages/Home";
+// 导入新的首页模块
+import { HomePage } from "@/pages/home";
 
 // 其他示例页面
 const AboutPage = () => <div className="p-4">关于</div>;

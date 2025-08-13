@@ -1,0 +1,115 @@
+// src/pages/home/templates/t1/styles/index.module.scss
+.title {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--color-primary);
+  text-align: center;
+}
+
+.bannerSection {
+  margin-bottom: 3rem;
+}
+
+.bannerItem {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.bannerContent {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  color: white;
+  background: linear-gradient(to top, rgb(0 0 0 / 70%), transparent);
+
+  h3 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+}
+
+.emptyBanner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-secondary);
+}
+
+.productSection {
+  margin-bottom: 3rem;
+}
+
+.sectionTitle {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.productImage {
+  width: 100%;
+  height: 150px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+}
+
+.productName {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: var(--color-text);
+}
+
+.productPrice {
+  margin: 0.5rem 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--color-error);
+}
+
+.buyButton {
+  width: 100%;
+  padding: 0.5rem;
+  color: white;
+  cursor: pointer;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: var(--color-primary-dark);
+  }
+}
+
+.emptyProducts {
+  grid-column: 1 / -1;
+  padding: 3rem;
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
